@@ -1,0 +1,15 @@
+{
+    "name" : "kern046/saturne",
+    "description" : "Multithreading API-engine webservice-oriented for Angular applications",
+    "keywords" : ["API", "multithread", "angularjs", "websocket"],
+    "type" : "library",
+    "license": "MIT",
+    "authors" : [
+        {
+            "name" : "Axel Venet",
+            "email" : "axel-venet@developtech.fr",
+            "homepage" : "http://developtech.fr",
+            "role" : "developer"
+        }
+    ]
+}
