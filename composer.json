@@ -11,5 +11,13 @@
             "homepage" : "http://developtech.fr",
             "role" : "developer"
         }
-    ]
+    ],
+    "require" : {
+        
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Saturne" : "src/"
+        }
+    }
 }
