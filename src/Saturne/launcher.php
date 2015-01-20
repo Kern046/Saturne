@@ -1,11 +1,12 @@
 <?php
 
-$file = '"' . __DIR__ . '\\engine.php"';
+$config = [
+    'WINNT' => [
+        'command' => 'start php "' . __DIR__ . DIRECTORY_SEPARATOR . 'engine.php"'
+    ],
+    'Linux' => [
+        'command' => 'php "' . __DIR__ . DIRECTORY_SEPARATOR . 'engine.php" &'
+    ]
+];
 
-$command = 
-    (PHP_OS === 'WINNT')
-    ? "start php $file"
-    : "php $file &"        
-;
-
-pclose(popen($command, 'r'));
+pclose(popen($config[PHP_OS]['command'], 'r'));
