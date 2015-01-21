@@ -10,5 +10,5 @@ namespace Saturne\Component\Event;
  */
 interface EventListenerInterface
 {
-    
+    public function receiveEvent($event);
 }

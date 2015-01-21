@@ -2,7 +2,7 @@
 
 namespace Saturne\Core\Kernel;
 
-use Saturne\Manager\EventManager;
+use Saturne\Component\Event\EventManager;
 
 /**
  * @name EngineKernel
