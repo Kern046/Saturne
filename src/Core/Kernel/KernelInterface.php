@@ -24,6 +24,7 @@ interface KernelInterface
      * Send an event to the EventManager for a broadcast diffusion to the listeners.
      * 
      * @param string $event
+     * @param array $data
      */
-    public function throwEvent($event);
+    public function throwEvent($event, $data = []);
 }

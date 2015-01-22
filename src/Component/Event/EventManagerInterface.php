@@ -12,8 +12,9 @@ interface EventManagerInterface
      * Send a broadcast call to the event listeners
      * 
      * @param string $event
+     * @param array $data
      */
-    public function transmit($event);
+    public function transmit($event, $data);
     
     /**
      * Add an object implementing the EventListenerInterface to the listeners

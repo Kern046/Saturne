@@ -26,7 +26,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         
         $this->eventManager->addListener($mock);
         
-        $this->eventManager->transmit('test-event');
+        $this->eventManager->transmit('test-event', []);
         
         $this->eventManager->removeListener($mock);
     }

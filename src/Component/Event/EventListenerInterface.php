@@ -10,5 +10,19 @@ namespace Saturne\Component\Event;
  */
 interface EventListenerInterface
 {
-    public function receiveEvent($event);
+    /**
+     * Check if the thrown event is registered for the current listener
+     * 
+     * @param string $event
+     * @return boolean
+     */
+    public function supportsEvent($event);
+    
+    /**
+     * Call the dedicated method for the given event
+     * 
+     * @param string $event
+     * @param array $data
+     */
+    public function receiveEvent($event, $data);
 }

@@ -11,16 +11,18 @@ class EventManager implements EventManagerInterface
     /** @var array <Object> **/
     private $listeners;
     
+    const ENGINE_INITIALIZED = 'engine-initialized';
+    
     /**
      * {@inheritdoc}
      */
-    public function transmit($event)
+    public function transmit($event, $data)
     {
         reset($this->listeners);
         
         while($name = key($this->listeners))
         {
-            $this->listeners[$name]->receiveEvent($event);
+            $this->listeners[$name]->receiveEvent($event, $data);
             next($this->listeners);
         }
     }
