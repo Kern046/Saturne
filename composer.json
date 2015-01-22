@@ -17,8 +17,8 @@
         "phpdocumentor/phpdocumentor" : "2.*"
     },
     "autoload" : {
-        "psr-0" : {
-            "Saturne" : "src/"
+        "psr-4" : {
+            "Saturne\\" : "src/"
         }
     }
 }
