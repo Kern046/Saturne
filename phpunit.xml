@@ -1,0 +1,22 @@
+<phpunit bootstrap="./bootstrap.php">
+    <testsuites>
+        <testsuite name="Wrapper">
+            <directory>./src/Tests</directory>
+        </testsuite>
+    </testsuites>
+    
+    <filter>
+        <whitelist>
+            <directory>./src</directory>
+            <exclude>
+                <directory>./src/Tests</directory>
+                <file>./src/engine.php</file>
+                <file>./src/launcher.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+    
+    <logging>
+        <log type="coverage-html" target="./code-coverage" charset="UTF-8"/>
+    </logging>
+</phpunit>
