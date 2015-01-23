@@ -3,6 +3,8 @@ namespace Saturne\Tests\Core\Kernel;
 
 use Saturne\Core\Kernel\EngineKernel;
 
+use Saturne\Tests\Component\Event\Mock\EventListenerMock;
+
 class EngineKernelTest extends \PHPUnit_Framework_TestCase
 {
     /** @var EngineKernel **/
@@ -24,13 +26,7 @@ class EngineKernelTest extends \PHPUnit_Framework_TestCase
     {
         $eventManager = $this->engine->getEventManager();
         
-        $mock = $this->getMock('Saturne\Component\Event\EventListenerInterface');
-        
-        $mock
-            ->expects($this->once())
-            ->method('receiveEvent')
-            ->will($this->returnCallback([$this, 'eventCallback']))
-        ;
+        $mock = new EventListenerMock();
         
         $eventManager->addListener($mock);
         

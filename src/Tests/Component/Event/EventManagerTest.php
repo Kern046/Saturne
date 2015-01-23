@@ -3,6 +3,7 @@
 namespace Saturne\Tests\Component\Event;
 
 use Saturne\Component\Event\EventManager;
+use Saturne\Tests\Component\Event\Mock\EventListenerMock;
 
 class EventManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,13 +17,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testFunctional()
     {
-        $mock = $this->getMock('Saturne\Component\Event\EventListenerInterface');
-        
-        $mock
-            ->expects($this->once())
-            ->method('receiveEvent')
-            ->will($this->returnValue(true))
-        ;
+        $mock = new EventListenerMock();
         
         $this->eventManager->addListener($mock);
         

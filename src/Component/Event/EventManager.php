@@ -32,9 +32,9 @@ class EventManager implements EventManagerInterface
      */
     public function addListener($listener)
     {
-        if(!$listener instanceof EventListenerInterface)
+        if(!in_array('Saturne\Component\Event\EventListenerTrait', class_uses($listener)))
         {
-            throw new \InvalidArgumentException('The listener must implement EventListenerInterface');
+            throw new \InvalidArgumentException('The listener must use EventListenerTrait');
         }
         $this->listeners[spl_object_hash($listener)] = $listener;
     }

@@ -2,15 +2,16 @@
 
 namespace Saturne\Component\Logger;
 
-use Saturne\Component\Event\EventListenerInterface;
+use Saturne\Component\Event\EventListenerTrait;
 use Saturne\Component\Event\EventManager;
 
 /**
  * @name CliLogger
  * @author Axel Venet <axel-venet@developtech.fr>
  */
-class CliLogger implements LoggerInterface, EventListenerInterface
+class CliLogger implements LoggerInterface
 {
+    use EventListenerTrait;
     /** @var array **/
     private $events = [
         EventManager::ENGINE_INITIALIZED => 'log'

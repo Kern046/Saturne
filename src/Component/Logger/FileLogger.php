@@ -2,15 +2,16 @@
 
 namespace Saturne\Component\Logger;
 
-use Saturne\Component\Event\EventListenerInterface;
+use Saturne\Component\Event\EventListenerTrait;
 use Saturne\Component\Event\EventManager;
 
 /**
  * @name FileLogger
  * @author Axel Venet <axel-venet@developtech.fr>
  */
-class FileLogger implements LoggerInterface, EventListenerInterface
+class FileLogger implements LoggerInterface
 {
+    use EventListenerTrait;
     /** @var array **/
     private $events = [
         EventManager::ENGINE_INITIALIZED => 'log'
