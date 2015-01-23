@@ -42,6 +42,9 @@ class EngineKernel implements KernelInterface
         return $this->eventManager;
     }
     
+    /**
+     * {@inheritdoc}
+     */
     public function setLoggers()
     {
         if(PHP_SAPI === 'cli')
