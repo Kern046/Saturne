@@ -13,6 +13,8 @@ class EventManager implements EventManagerInterface
     
     const ENGINE_INITIALIZED = 'engine-initialized';
     
+    const ENGINE_STATUS_REQUEST = 'engine-status-request';
+    
     /**
      * {@inheritdoc}
      */
