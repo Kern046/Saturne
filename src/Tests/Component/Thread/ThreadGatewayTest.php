@@ -1,0 +1,40 @@
+<?php
+
+namespace Saturne\Tests\Component\Thread;
+
+use Saturne\Component\Thread\ThreadGateway;
+
+use Saturne\Model\Thread;
+
+class ThreadGatewayTest extends \PHPUnit_Framework_TestCase
+{
+    /** @var ThreadGateway **/
+    private $gateway;
+    /** @var Thread **/
+    private $thread;
+    
+    public function setUp()
+    {
+        $this->gateway = new ThreadGateway();
+        
+        $handle = fopen('php://temp', 'r+');
+        
+        $this->thread = new Thread('Thread_Test', $handle, $handle);
+    }
+    
+    public function testWriteTo()
+    {
+        $this->gateway->writeTo($this->thread, ['command' => 'test']);
+    }
+    
+    public function testRead()
+    {
+        $this->gateway->writeTo($this->thread, ['command' => 'test']);
+        
+        $output = $this->gateway->read($this->thread);
+        
+        $this->assertArrayHasKey('command', $output);
+        $this->assertEquals('test', $output['command']);
+        
+    }
+}

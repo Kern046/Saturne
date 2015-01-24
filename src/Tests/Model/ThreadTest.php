@@ -9,8 +9,8 @@ class ThreadTest extends \PHPUnit_Framework_TestCase
     public function test()
     {
         // Fake resources
-        $input = opendir('src');
-        $output = opendir('src');
+        $input = fopen('php://temp', 'r');
+        $output = fopen('php://temp', 'w');
         
         $thread =
             (new Thread('test-thread', $input, $output))
@@ -24,8 +24,5 @@ class ThreadTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(95885, $thread->getMemory());
         $this->assertEquals(122354, $thread->getAllocatedMemory());
         $this->assertInternalType('integer', $thread->getStartTime());
-        
-        closedir($input);
-        closedir($output);
     }
 }
