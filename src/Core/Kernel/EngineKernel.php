@@ -4,6 +4,8 @@ namespace Saturne\Core\Kernel;
 
 use Saturne\Component\Event\EventManager;
 
+use Saturne\Component\Thread\ThreadManager;
+
 use Saturne\Component\Logger\CliLogger;
 use Saturne\Component\Logger\FileLogger;
 
@@ -15,11 +17,14 @@ class EngineKernel implements KernelInterface
 {
     /** @var EventManager **/
     private $eventManager;
+    /** @var ThreadManager **/
+    private $threadManager;
     
     public function __construct()
     {
         $this->setEventManager();
         $this->setLoggers();
+        $this->setThreadManager();
         
         $this->throwEvent(EventManager::ENGINE_INITIALIZED, [
             'message' => 'Engine is now initialized'
@@ -32,6 +37,11 @@ class EngineKernel implements KernelInterface
     public function setEventManager()
     {
         $this->eventManager = new EventManager();
+    }
+    
+    public function setThreadManager()
+    {
+        $this->threadManager = new ThreadManager();
     }
     
     /**
