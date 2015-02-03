@@ -7,6 +7,8 @@
  */
 namespace Saturne\Component\LoadBalancer;
 
+use Saturne\Model\Client;
+
 /**
  * @name LoadBalancer
  * @author Axel Venet <axel-venet@developtech.fr>
@@ -21,7 +23,7 @@ class LoadBalancer implements LoadBalancerInterface
     /**
      * {@inheritdoc}
      */
-    public function affectClient()
+    public function affectClient(Client $client)
     {
         
     }
