@@ -2,6 +2,8 @@
 
 namespace Saturne\Model;
 
+use Saturne\Model\Client;
+
 /**
  * @name Thread
  * @author Axel Venet <axel-venet@developtech.fr>
@@ -20,13 +22,12 @@ class Thread
     private $input;
     /** @var resource **/
     private $output;
+    /** @var array **/
+    private $clients;
     
-    public function __construct($name, $input, $output)
+    public function __construct()
     {
-        $this->name = $name;
-        $this->input = $input;
-        $this->output = $output;
-        $this->startTime = time();
+        $this->startTime = new \DateTime();
     }
     
     /**
@@ -97,5 +98,52 @@ class Thread
     public function getName()
     {
         return $this->name;
+    }
+    
+    /**
+     * Hash a client and add it to the thread clients
+     * 
+     * @param Client $client
+     */
+    public function addClient(Client $client)
+    {
+        if(!$this->hasClient($client))
+        {
+            $this->clients[spl_object_hash($client)] = $client;
+        }
+    }
+    
+    /**
+     * Remove a client if it is stored in the current thread
+     * 
+     * @param Client $client
+     */
+    public function removeClient(Client $client)
+    {
+        if($this->hasClient($client))
+        {
+            unset($this->clients[spl_object_hash($client)]);
+        }
+    }
+    
+    /**
+     * Check if a client is already registered in the current clients
+     * 
+     * @param Client $client
+     * @return boolean
+     */
+    public function hasClient(Client $client)
+    {
+        return isset($this->clients[spl_object_hash($client)]);
+    }
+    
+    /**
+     * Return all the current clients
+     * 
+     * @return array<Client>
+     */
+    public function getClients()
+    {
+        return $this->clients;
     }
 }
