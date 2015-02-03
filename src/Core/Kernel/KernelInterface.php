@@ -26,6 +26,17 @@ interface KernelInterface
      */
     public function setLoggers();
     
+    
+    /**
+     * Initialize the ThreadManager
+     */
+    public function setThreadManager();
+    
+    /**
+     * Add the LoadBalancer as a listener
+     */
+    public function setLoadBalancer();
+    
     /**
      * Send an event to the EventManager for a broadcast diffusion to the listeners.
      * 

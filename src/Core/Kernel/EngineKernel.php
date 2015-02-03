@@ -9,6 +9,8 @@ use Saturne\Component\Thread\ThreadManager;
 use Saturne\Component\Logger\CliLogger;
 use Saturne\Component\Logger\FileLogger;
 
+use Saturne\Component\LoadBalancer\LoadBalancer;
+
 /**
  * @name EngineKernel
  * @authro Axel Venet <axel-venet@developtech.fr>
@@ -19,12 +21,15 @@ class EngineKernel implements KernelInterface
     private $eventManager;
     /** @var ThreadManager **/
     private $threadManager;
+    /** @var LoadBalancer **/
+    private $loadBalancer;
     
     public function __construct()
     {
         $this->setEventManager();
         $this->setLoggers();
         $this->setThreadManager();
+        $this->setLoadBalancer();
         
         $this->throwEvent(EventManager::ENGINE_INITIALIZED, [
             'message' => 'Engine is now initialized'
@@ -39,9 +44,20 @@ class EngineKernel implements KernelInterface
         $this->eventManager = new EventManager();
     }
     
+    /**
+     * {@inheritdoc}
+     */
     public function setThreadManager()
     {
         $this->threadManager = new ThreadManager();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function setLoadBalancer()
+    {
+        $this->loadBalancer = new LoadBalancer();
     }
     
     /**
