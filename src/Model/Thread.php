@@ -77,6 +77,19 @@ class Thread
     }
     
     /**
+     * Set the Thread input
+     * 
+     * @param resource $input
+     * @return Thread
+     */
+    public function setInput($input)
+    {
+        $this->input = $input;
+        
+        return $this;
+    }
+    
+    /**
      * @return resource
      */
     public function getInput()
@@ -85,11 +98,37 @@ class Thread
     }
     
     /**
+     * Set the Thread output
+     * 
+     * @param resource $output
+     * @return Thread
+     */
+    public function setOutput($output)
+    {
+        $this->output = $output;
+        
+        return $this;
+    }
+    
+    /**
      * @return resource
      */
     public function getOutput()
     {
         return $this->output;
+    }
+    
+    /**
+     * Set name
+     * 
+     * @param string $name
+     * @return Thread
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        
+        return $this;
     }
     
     /**
@@ -104,6 +143,7 @@ class Thread
      * Hash a client and add it to the thread clients
      * 
      * @param Client $client
+     * @return Thread
      */
     public function addClient(Client $client)
     {
@@ -111,12 +151,14 @@ class Thread
         {
             $this->clients[spl_object_hash($client)] = $client;
         }
+        return $this;
     }
     
     /**
      * Remove a client if it is stored in the current thread
      * 
      * @param Client $client
+     * @return Thread
      */
     public function removeClient(Client $client)
     {
@@ -124,6 +166,7 @@ class Thread
         {
             unset($this->clients[spl_object_hash($client)]);
         }
+        return $this;
     }
     
     /**
