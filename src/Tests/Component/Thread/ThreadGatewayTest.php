@@ -19,7 +19,12 @@ class ThreadGatewayTest extends \PHPUnit_Framework_TestCase
         
         $handle = fopen('php://temp', 'r+');
         
-        $this->thread = new Thread('Thread_Test', $handle, $handle);
+        $this->thread =
+            (new Thread())
+            ->setName('Thread_Test')
+            ->setInput($handle)
+            ->setOutput($handle)
+        ;
     }
     
     public function testWriteTo()

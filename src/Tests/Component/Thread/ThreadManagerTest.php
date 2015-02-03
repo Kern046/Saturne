@@ -3,7 +3,6 @@
 namespace Saturne\Tests\Component\Thread;
 
 use Saturne\Component\Thread\ThreadManager;
-use Saturne\Model\Thread;
 
 class ThreadManagerTest extends \PHPUnit_Framework_TestCase
 {

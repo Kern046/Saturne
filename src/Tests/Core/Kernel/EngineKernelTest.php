@@ -12,7 +12,8 @@ class EngineKernelTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->engine = new EngineKernel();
+        $this->engine = EngineKernel::getInstance();
+        $this->engine->init();
     }
     
     public function testGetManager()
