@@ -56,8 +56,12 @@ class ThreadManager
                 ]
         ], $pipes));
         
-        $this->threads[$name] = new Thread($name, $pipes[0], $pipes[1]);
-        
+        $this->threads[$name] =
+            (new Thread())
+            ->setName($name)
+            ->setInput($pipes[0])
+            ->setOutput($pipes[1])
+        ;
         ++$this->instanciedThreads;
     }
     

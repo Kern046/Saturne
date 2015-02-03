@@ -31,26 +31,6 @@ class FileLogger implements LoggerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsEvent($event)
-    {
-        return isset($this->events[$event]);
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function receiveEvent($event, $data)
-    {
-        if(!$this->supportsEvent($event))
-        {
-            return false;
-        }
-        $this->{$this->events[$event]}($data);
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
     public function log($data)
     {
         if(!isset($data['message']))
