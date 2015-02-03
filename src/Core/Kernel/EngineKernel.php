@@ -11,20 +11,32 @@ use Saturne\Component\Logger\FileLogger;
 
 use Saturne\Component\LoadBalancer\LoadBalancer;
 
+use Saturne\Component\Client\ClientManager;
+use Saturne\Component\Client\ClientListener;
+
 /**
  * @name EngineKernel
  * @authro Axel Venet <axel-venet@developtech.fr>
  */
 class EngineKernel implements KernelInterface
 {
+    /** @var EngineKernel **/
+    private static $instance;
     /** @var EventManager **/
     private $eventManager;
     /** @var ThreadManager **/
     private $threadManager;
     /** @var LoadBalancer **/
     private $loadBalancer;
+    /** @var ClientManager **/
+    private $clientManager;
     
-    public function __construct()
+    private function __construct(){}
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function init()
     {
         $this->setEventManager();
         $this->setLoggers();
@@ -47,9 +59,25 @@ class EngineKernel implements KernelInterface
     /**
      * {@inheritdoc}
      */
+    public function getEventManager()
+    {
+        return $this->eventManager;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     public function setThreadManager()
     {
         $this->threadManager = new ThreadManager();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getThreadManager()
+    {
+        return $this->threadManager;
     }
     
     /**
@@ -63,9 +91,9 @@ class EngineKernel implements KernelInterface
     /**
      * {@inheritdoc}
      */
-    public function getEventManager()
+    public function getLoadBalancer()
     {
-        return $this->eventManager;
+        return $this->loadBalancer;
     }
     
     /**
@@ -83,8 +111,34 @@ class EngineKernel implements KernelInterface
     /**
      * {@inheritdoc}
      */
+    public function setClientManager()
+    {
+        $this->clientManager = new ClientManager();
+        $this->eventManager->addListener(new ClientListener());
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getClientManager()
+    {
+        return $this->clientManager;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     public function throwEvent($event, $data = [])
     {
         $this->eventManager->transmit($event, $data);
+    }
+    
+    public static function getInstance()
+    {
+        if(self::$instance === null)
+        {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 }

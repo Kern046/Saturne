@@ -2,12 +2,19 @@
 
 namespace Saturne\Core\Kernel;
 
+use Saturne\Component\Client\ClientManager;
+
 /**
  * @name KernelInterface
  * @author Axel Venet <axel-venet@developtech.fr>
  */
 interface KernelInterface
 {
+    /**
+     * Initialize the engine and set all components
+     */
+    public function init();
+    
     /**
      * Initialize the EventManager
      */
@@ -26,16 +33,37 @@ interface KernelInterface
      */
     public function setLoggers();
     
-    
     /**
      * Initialize the ThreadManager
      */
     public function setThreadManager();
     
     /**
+     * Get the ThreadManager
+     */
+    public function getThreadManager();
+    
+    /**
      * Add the LoadBalancer as a listener
      */
     public function setLoadBalancer();
+    
+    /**
+     * Get the LoadBalancer
+     */
+    public function getLoadBalancer();
+    
+    /**
+     * Set the clientManager and add ClientListener as an event listener
+     */
+    public function setClientManager();
+    
+    /**
+     * Get the ClientManager
+     * 
+     * @return ClientManager
+     */
+    public function getClientManager();
     
     /**
      * Send an event to the EventManager for a broadcast diffusion to the listeners.
@@ -44,4 +72,11 @@ interface KernelInterface
      * @param array $data
      */
     public function throwEvent($event, $data = []);
+    
+    /**
+     * Implementation of the Singleton design pattern
+     * 
+     * @return KernelInterface
+     */
+    public static function getInstance();
 }
