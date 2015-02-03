@@ -12,8 +12,9 @@ class EventManager implements EventManagerInterface
     private $listeners;
     
     const ENGINE_INITIALIZED = 'engine-initialized';
-    
     const ENGINE_STATUS_REQUEST = 'engine-status-request';
+    
+    const NETWORK_NEW_CONNECTION = 'network-new-connection';
     
     /**
      * {@inheritdoc}
