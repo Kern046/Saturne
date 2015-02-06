@@ -3,6 +3,7 @@
 namespace Saturne\Component\Client;
 
 use Saturne\Component\Event\EventListenerTrait;
+use Saturne\Component\Event\EventManager;
 
 use Saturne\Core\Kernel\EngineKernel;
 

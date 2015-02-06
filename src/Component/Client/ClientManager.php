@@ -2,9 +2,6 @@
 
 namespace Saturne\Component\Client;
 
-use Saturne\Component\Event\EventListenerTrait;
-use Saturne\Component\Event\EventManager;
-
 use Saturne\Core\Kernel\EngineKernel;
 
 use Saturne\Model\Client;
@@ -39,6 +36,11 @@ class ClientManager implements ClientManagerInterface
     public function getNetworkData($data)
     {
         // TODO : Implement network operations on the request
+        return [
+            'ip' => '127.0.0.1',
+            'port' => 4000,
+            'userAgent' => 'Mozilla'
+        ];
     }
 }
 
