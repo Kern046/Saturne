@@ -110,6 +110,6 @@ class Client
      */
     public function getConnectionStart()
     {
-        return $this->connectionStart();
+        return $this->connectionStart;
     }
 }
