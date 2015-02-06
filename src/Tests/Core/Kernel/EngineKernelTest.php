@@ -16,11 +16,18 @@ class EngineKernelTest extends \PHPUnit_Framework_TestCase
         $this->engine->init();
     }
     
-    public function testGetManager()
+    public function testGetEventManager()
     {
         $eventManager = $this->engine->getEventManager();
         
         $this->assertInstanceOf('Saturne\Component\Event\EventManager', $eventManager);
+    }
+    
+    public function testGetThreadManager()
+    {
+        $threadManager = $this->engine->getThreadManager();
+        
+        $this->assertInstanceOf('Saturne\Component\Thread\ThreadManager', $threadManager);
     }
     
     public function testThrowEvent()

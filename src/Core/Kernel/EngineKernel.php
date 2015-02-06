@@ -42,6 +42,7 @@ class EngineKernel implements KernelInterface
         $this->setLoggers();
         $this->setThreadManager();
         $this->setLoadBalancer();
+        $this->setClientManager();
         
         $this->throwEvent(EventManager::ENGINE_INITIALIZED, [
             'message' => 'Engine is now initialized'
