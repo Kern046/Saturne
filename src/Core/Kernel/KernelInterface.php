@@ -3,6 +3,10 @@
 namespace Saturne\Core\Kernel;
 
 use Saturne\Component\Client\ClientManager;
+use Saturne\Component\Event\EventManager;
+use Saturne\Component\Server\Server;
+use Saturne\Component\LoadBalancer\LoadBalancer;
+use Saturne\Component\Thread\ThreadManager;
 
 /**
  * @name KernelInterface
@@ -40,6 +44,8 @@ interface KernelInterface
     
     /**
      * Get the ThreadManager
+     * 
+     * @return ThreadManager
      */
     public function getThreadManager();
     
@@ -50,6 +56,8 @@ interface KernelInterface
     
     /**
      * Get the LoadBalancer
+     * 
+     * @return LoadBalancer
      */
     public function getLoadBalancer();
     
@@ -64,6 +72,18 @@ interface KernelInterface
      * @return ClientManager
      */
     public function getClientManager();
+    
+    /**
+     * Set the Server
+     */
+    public function setServer();
+    
+    /**
+     * Get the Server
+     * 
+     * @return Server
+     */
+    public function getServer();
     
     /**
      * Send an event to the EventManager for a broadcast diffusion to the listeners.

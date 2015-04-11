@@ -14,6 +14,8 @@ use Saturne\Component\LoadBalancer\LoadBalancer;
 use Saturne\Component\Client\ClientManager;
 use Saturne\Component\Client\ClientListener;
 
+use Saturne\Component\Server\Server;
+
 /**
  * @name EngineKernel
  * @authro Axel Venet <axel-venet@developtech.fr>
@@ -30,6 +32,8 @@ class EngineKernel implements KernelInterface
     private $loadBalancer;
     /** @var ClientManager **/
     private $clientManager;
+    /** @var Server **/
+    private $server;
     
     private function __construct(){}
     
@@ -43,6 +47,7 @@ class EngineKernel implements KernelInterface
         $this->setThreadManager();
         $this->setLoadBalancer();
         $this->setClientManager();
+        $this->setServer();
         
         $this->throwEvent(EventManager::ENGINE_INITIALIZED, [
             'message' => 'Engine is now initialized'
@@ -79,6 +84,22 @@ class EngineKernel implements KernelInterface
     public function getThreadManager()
     {
         return $this->threadManager;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function setServer()
+    {
+        $this->server = new Server();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getServer()
+    {
+        return $this->server;
     }
     
     /**
