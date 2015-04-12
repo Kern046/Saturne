@@ -2,6 +2,9 @@
 
 namespace Saturne\Component\Server;
 
+use Saturne\Core\Kernel\EngineKernel;
+use Saturne\Component\Event\EventManager;
+
 /**
  * @name Server
  * @author Axel Venet <axel-venet@developtech.fr>
@@ -9,9 +12,9 @@ namespace Saturne\Component\Server;
 class Server implements ServerInterface
 {
     /** @var array<resource> **/
-    private $inputs;
+    private $inputs = [];
     /** @var array<resource> **/
-    private $outputs;
+    private $outputs = [];
     /** @var boolean **/
     private $listen = true;
     /**
@@ -19,37 +22,63 @@ class Server implements ServerInterface
      */
     public function listen()
     {
+        $this->addInput('master', stream_socket_server('tcp://127.0.0.1:8889', $errno, $errstr));
+        
+        EngineKernel::getInstance()->getEventManager()->transmit(EventManager::NETWORK_SERVER_LISTENING, [
+            'protocol' => 'tcp',
+            'ip' => '127.0.0.1',
+            'port' => 8889,
+            'message' => 'The server is now listening at tcp://127.0.0.1:8889'
+        ]);
+        
         while($this->listen === true)
         {
             $inputs = $this->getMappedInputs();
             $outputs = $this->getMappedOutputs();
-            if(($nbUpdatedStreams = stream_select($inputs, $outputs, $errors = null, 10)) !== false)
+            $errors = null;
+            if(($nbUpdatedStreams = stream_select($inputs, $outputs, $errors, 10)) !== false)
             {
                 if($nbUpdatedStreams < 1)
                 {
                     continue;
                 }
-                
                 $this->treatInputs($inputs);
                 $this->treatOutputs($outputs);
             }
         }
     }
     
-    public function treatInputs()
+    /**
+     * {@inheritdoc}
+     */
+    public function treatInputs($inputs)
     {
-        
-    }
-    
-    public function treatOutputs()
-    {
-        
+        foreach($inputs as $input)
+        {
+            $name = array_search($input, $this->inputs);
+            
+            if($name === 'master')
+            {
+                $this->acceptConnection($input);
+            }
+        }
     }
     
     /**
      * {@inheritdoc}
      */
-    public function acceptConnection()
+    public function treatOutputs($outputs)
+    {
+        foreach($outputs as $output)
+        {
+            $name = array_search($input, $this->outputs);
+        }
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function acceptConnection($input)
     {
         
     }
@@ -107,7 +136,7 @@ class Server implements ServerInterface
      */
     public function getMappedInputs()
     {
-        return array_map(function($name, $input){ return $input; }, $this->inputs);
+        return array_map(function($input){ return $input; }, $this->inputs);
     }
     
     /**
@@ -163,6 +192,6 @@ class Server implements ServerInterface
      */
     public function getMappedOutputs()
     {
-        return array_map(function($name, $output){ return $output; }, $this->outputs);
+        return array_map(function($output){ return $output; }, $this->outputs);
     }
 }

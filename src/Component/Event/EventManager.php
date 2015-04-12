@@ -14,6 +14,7 @@ class EventManager implements EventManagerInterface
     const ENGINE_INITIALIZED = 'engine-initialized';
     const ENGINE_STATUS_REQUEST = 'engine-status-request';
     
+    const NETWORK_SERVER_LISTENING = 'network-server-listening';
     const NETWORK_NEW_CONNECTION = 'network-new-connection';
     
     /**

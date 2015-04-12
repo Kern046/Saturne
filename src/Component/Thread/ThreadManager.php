@@ -31,6 +31,11 @@ class ThreadManager
         $this->gateway = new ThreadGateway();
     }
     
+    public function launchThreads()
+    {
+        
+    }
+    
     /**
      * @return array<Thread>
      */

@@ -14,9 +14,9 @@ interface ServerInterface
     public function listen();
     
     /**
-     * {@inheritdoc}
+     * @param resource $input
      */
-    public function acceptConnection();
+    public function acceptConnection($input);
     
     /**
      * {@inheritdoc}
@@ -65,6 +65,13 @@ interface ServerInterface
     public function getInputs();
     
     /**
+     * Get all the inputs into a linear array of resources
+     * 
+     * @return array
+     */
+    public function getMappedInputs();
+    
+    /**
      * Add an output registered by name in the outputs array
      * Throws an exception if the given name is already affected
      * 
@@ -105,4 +112,11 @@ interface ServerInterface
      * @return array
      */
     public function getOutputs();
+    
+    /**
+     * Get all the outputs into a linear array of resources
+     * 
+     * @return array
+     */
+    public function getMappedOutputs();
 }
