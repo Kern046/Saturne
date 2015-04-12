@@ -52,6 +52,9 @@ class EngineKernel implements KernelInterface
         $this->throwEvent(EventManager::ENGINE_INITIALIZED, [
             'message' => 'Engine is now initialized'
         ]);
+        
+        $this->threadManager->launchThreads();
+        $this->server->listen();
     }
     
     /**

@@ -41,19 +41,18 @@ class ThreadManager
     
     public function addThread()
     {
-        $name = 'Thread_' . $this->instanciedThreads;
-        $command = $this->command . " $name";
+        $name = "Thread_{$this->instanciedThreads}";
         
-        proc_close(proc_open($command, [
+        proc_close(proc_open("{$this->command} $name", [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
             2 => [
-                    'file',
-                    dirname(dirname(dirname(__DIR__))) .
-                    DIRECTORY_SEPARATOR . 'logs' .
-                    DIRECTORY_SEPARATOR . 'thread_errors.log',
-                    'a+'
-                ]
+                'file',
+                dirname(dirname(dirname(__DIR__))) .
+                DIRECTORY_SEPARATOR . 'logs' .
+                DIRECTORY_SEPARATOR . 'thread_errors.log',
+                'a+'
+            ]
         ], $pipes));
         
         $this->threads[$name] =
@@ -62,6 +61,9 @@ class ThreadManager
             ->setInput($pipes[0])
             ->setOutput($pipes[1])
         ;
+        $server = EngineKernel::getInstance()->getServer();
+        $server->addInput($name, $pipes[0]);
+        $server->addOutput($name, $pipes[1]);
         ++$this->instanciedThreads;
     }
     
