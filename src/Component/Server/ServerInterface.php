@@ -24,42 +24,85 @@ interface ServerInterface
     public function closeConnection();
     
     /**
-     * {@inheritdoc}
+     * Register the input related to the given name
+     * Throws an exception if the name is already affected
+     * 
+     * @param string $name
+     * @param resource $input
+     * @throws InvalidArgumentException
      */
-    public function addInput();
+    public function addInput($name, $input);
     
     /**
-     * {@inheritdoc}
+     * CHeck if an input is associated to the given name
+     * 
+     * @param $name
+     * @return boolean
      */
-    public function getInput();
+    public function hasInput($name);
     
     /**
-     * {@inheritdoc}
+     * Get the given name's associated input
+     * 
+     * @param string $name
+     * @return resource
+     * @throws InvalidArgumentException
      */
-    public function removeInput();
+    public function getInput($name);
     
     /**
-     * {@inheritdoc}
+     * Remove the given input
+     * 
+     * @param string $name
+     */
+    public function removeInput($name);
+    
+    /**
+     * Return all the registered inputs
+     * 
+     * @return array
      */
     public function getInputs();
     
     /**
-     * {@inheritdoc}
+     * Add an output registered by name in the outputs array
+     * Throws an exception if the given name is already affected
+     * 
+     * @param string $name
+     * @param resource $output
+     * @throws InvalidArgumentException
      */
-    public function addOutput();
+    public function addOutput($name, $output);
     
     /**
-     * {@inheritdoc}
+     * Check if an output is registered for the given name
+     * 
+     * @param string $name
+     * @return boolean
      */
-    public function getOutput();
+    public function hasOutput($name);
     
     /**
-     * {@inheritdoc}
+     * Get the requested output if it exists
+     * Throws an exception otherwise
+     * 
+     * @param string $name
+     * @return resource
+     * @throws InvalidArgumentException
      */
-    public function removeOutput();
+    public function getOutput($name);
     
     /**
-     * {@inheritdoc}
+     * Remove the given output
+     * 
+     * @param string $name
+     */
+    public function removeOutput($name);
+    
+    /**
+     * Return all the registered outputs
+     * 
+     * @return array
      */
     public function getOutputs();
 }
