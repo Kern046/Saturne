@@ -9,6 +9,9 @@ namespace Saturne\Component\LoadBalancer;
 
 use Saturne\Model\Client;
 
+use Saturne\Core\Kernel\EngineKernel;
+use Saturne\Component\Event\EventManager;
+
 /**
  * @name LoadBalancer
  * @author Axel Venet <axel-venet@developtech.fr>
@@ -25,6 +28,8 @@ class LoadBalancer implements LoadBalancerInterface
      */
     public function affectClient(Client $client)
     {
-        
+        EngineKernel::getInstance()->throwEvent(EventManager::CLIENT_AFFECTION, [
+            'message' => "Client {$client->getIp()}:{$client->getPort()} is now affected"
+        ]);
     }
 }

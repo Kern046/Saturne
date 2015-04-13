@@ -14,12 +14,4 @@ interface ClientManagerInterface
      * @param array $data
      */
     public function createConnection($data);
-    
-    /**
-     * Convert the request informations into client useful data
-     * 
-     * @param array $data
-     * @return array
-     */
-    public function getNetworkData($data);
 }

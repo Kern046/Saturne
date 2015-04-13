@@ -24,6 +24,14 @@ interface ServerInterface
     public function closeConnection();
     
     /**
+     * Convert the request informations into client useful data
+     * 
+     * @param array $data
+     * @return array
+     */
+    public function getNetworkData($data);
+    
+    /**
      * Register the input related to the given name
      * Throws an exception if the name is already affected
      * 

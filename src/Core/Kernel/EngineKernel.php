@@ -57,6 +57,14 @@ class EngineKernel implements KernelInterface
         $this->server->listen();
     }
     
+    public function shutdown()
+    {
+        $this->clientManager->cleanClients();
+        $this->throwEvent(EventManager::ENGINE_SHUTDOWN, [
+            'message' => 'Engine will now shutdown'
+        ]);
+    }
+    
     /**
      * {@inheritdoc}
      */
@@ -139,7 +147,6 @@ class EngineKernel implements KernelInterface
     public function setClientManager()
     {
         $this->clientManager = new ClientManager();
-        $this->eventManager->addListener(new ClientListener());
     }
     
     /**

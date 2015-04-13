@@ -24,7 +24,7 @@ class Server implements ServerInterface
     {
         $this->addInput('master', stream_socket_server('tcp://127.0.0.1:8889', $errno, $errstr));
         
-        EngineKernel::getInstance()->getEventManager()->transmit(EventManager::NETWORK_SERVER_LISTENING, [
+        EngineKernel::getInstance()->throwEvent(EventManager::NETWORK_SERVER_LISTENING, [
             'protocol' => 'tcp',
             'ip' => '127.0.0.1',
             'port' => 8889,
@@ -80,7 +80,40 @@ class Server implements ServerInterface
      */
     public function acceptConnection($input)
     {
+        $connection = stream_socket_accept($input, null, $peername);
         
+        $networkData = $this->getNetworkData([
+            'connection' => $connection,
+            'peername' => $peername,
+        ]);
+        
+        EngineKernel::getInstance()->getClientManager()->getActionManager()->treatAction($networkData);
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getNetworkData($data)
+    {
+        $contents = json_decode(fread($data['connection'], 2048), true);
+        $networkData = explode(':', $data['peername']);
+        
+        return [
+            'action' => $contents['action'],
+            'ip' => $networkData[0],
+            'port' => $networkData[1],
+            'user-agent' => $contents['user-agent']
+        ];
+    }
+    
+    public function shutdown($networkData)
+    {
+        $this->listen = false;
+        
+        EngineKernel::getInstance()->throwEvent(EventManager::NETWORK_SHUTDOWN, [
+            'message' => 'Server will now shutdown due to user request'
+        ]);
+        EngineKernel::getInstance()->shutdown();
     }
     
     /**

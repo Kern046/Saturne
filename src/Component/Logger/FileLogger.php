@@ -15,8 +15,11 @@ class FileLogger implements LoggerInterface
     /** @var array **/
     private $events = [
         EventManager::ENGINE_INITIALIZED => 'log',
+        EventManager::ENGINE_SHUTDOWN => 'log',
         EventManager::NETWORK_SERVER_LISTENING => 'log',
-        EventManager::NETWORK_NEW_CONNECTION => 'log'
+        EventManager::NETWORK_NEW_CONNECTION => 'log',
+        EventManager::NETWORK_SHUTDOWN => 'log',
+        EventManager::CLIENT_AFFECTION => 'log'
     ];
     /** @var string **/
     private $dir;

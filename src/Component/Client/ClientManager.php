@@ -6,41 +6,52 @@ use Saturne\Core\Kernel\EngineKernel;
 
 use Saturne\Model\Client;
 
+use Saturne\Component\Client\ClientActionManager;
+use Saturne\Component\Event\EventManager;
+
 /**
  * @name ClientManager
  * @author Axel Venet <axel-venet@developtech.fr>
  */
 class ClientManager implements ClientManagerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function createConnection($data)
+    /** @var ClientActionManager **/
+    private $actionManager;
+    /** @var array **/
+    private $clients;
+    
+    public function __construct()
     {
-        $networkData = $this->getNetworkData($data);
-        
-        $client =
-            (new Client())
-            ->setIp($networkData['ip'])
-            ->setPort($networkData['port'])
-            ->setUserAgent($networkData['userAgent'])
-        ;
-        
-        $loadBalancer = EngineKernel::getInstance()->getLoadBalancer();
-        $loadBalancer->affectClient($client);
+        $this->actionManager = new ClientActionManager();
+    }
+    
+    public function cleanClients()
+    {
+        unset($this->clients);
     }
     
     /**
      * {@inheritdoc}
      */
-    public function getNetworkData($data)
+    public function createConnection($data)
     {
-        // TODO : Implement network operations on the request
-        return [
-            'ip' => '127.0.0.1',
-            'port' => 4000,
-            'userAgent' => 'Mozilla'
-        ];
+        $client =
+            (new Client())
+            ->setIp($data['ip'])
+            ->setPort($data['port'])
+            ->setUserAgent($data['user-agent'])
+        ;
+        
+        EngineKernel::getInstance()->throwEvent(EventManager::NETWORK_NEW_CONNECTION, [
+            'message' => "New connection from {$data['ip']}:{$data['port']}"
+        ]);
+        
+        EngineKernel::getInstance()->getLoadBalancer()->affectClient($client);
+    }
+    
+    public function getActionManager()
+    {
+        return $this->actionManager;
     }
 }
 
