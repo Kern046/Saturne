@@ -53,6 +53,8 @@ class Server implements ServerInterface
      */
     public function treatInputs($inputs)
     {
+        $threadManager = EngineKernel::getInstance()->getThreadManager();
+        
         foreach($inputs as $input)
         {
             $name = array_search($input, $this->inputs);
@@ -60,7 +62,9 @@ class Server implements ServerInterface
             if($name === 'master')
             {
                 $this->acceptConnection($input);
+                continue;
             }
+            $threadManager->treatThreadInput($name);
         }
     }
     

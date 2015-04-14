@@ -14,6 +14,8 @@ use Saturne\Component\LoadBalancer\LoadBalancer;
 use Saturne\Component\Client\ClientManager;
 use Saturne\Component\Client\ClientListener;
 
+use Saturne\Component\Memory\MemoryManager;
+
 use Saturne\Component\Server\Server;
 
 /**
@@ -32,6 +34,8 @@ class EngineKernel implements KernelInterface
     private $loadBalancer;
     /** @var ClientManager **/
     private $clientManager;
+    /** @var MemoryManager **/
+    private $memoryManager;
     /** @var Server **/
     private $server;
     
@@ -42,15 +46,17 @@ class EngineKernel implements KernelInterface
      */
     public function init()
     {
+        $this->setMemoryManager();
         $this->setEventManager();
         $this->setLoggers();
         $this->setThreadManager();
         $this->setLoadBalancer();
         $this->setClientManager();
         $this->setServer();
+        $this->memoryManager->refreshMemory();
         
         $this->throwEvent(EventManager::ENGINE_INITIALIZED, [
-            'message' => 'Engine is now initialized'
+            'message' => "Engine is now initialized with {$this->memoryManager->getMemory()}/{$this->memoryManager->getAllocatedMemory()} bytes"
         ]);
         
         $this->threadManager->launchThreads();
@@ -63,6 +69,14 @@ class EngineKernel implements KernelInterface
         $this->throwEvent(EventManager::ENGINE_SHUTDOWN, [
             'message' => 'Engine will now shutdown'
         ]);
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function setMemoryManager()
+    {
+        $this->memoryManager = new MemoryManager();
     }
     
     /**
@@ -103,6 +117,14 @@ class EngineKernel implements KernelInterface
     public function setServer()
     {
         $this->server = new Server();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getMemoryManager()
+    {
+        return $this->memoryManager;
     }
     
     /**

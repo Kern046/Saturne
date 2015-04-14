@@ -6,6 +6,8 @@ use Saturne\Model\Thread;
 
 use Saturne\Component\Thread\ThreadGateway;
 
+use Saturne\Core\Kernel\EngineKernel;
+
 /**
  * @name ThreadManager
  * @author Axel Venet <axel-venet@developtech.fr>
@@ -33,7 +35,39 @@ class ThreadManager
     
     public function launchThreads()
     {
+        $init = true;
         
+        $memoryManager = EngineKernel::getInstance()->getMemoryManager();
+        $memoryManager->refreshMemory();
+        
+        $totalMemory = $memoryManager->getAllocatedMemory();
+        
+        while($init === true)
+        {
+            $thread = $this->initThread();
+            $totalMemory += $thread->getAllocatedMemory();
+            
+            if($totalMemory > 2000000)
+            {
+                $init = false;
+            }
+        }
+    }
+    
+    public function initThread()
+    {
+        $name = $this->addThread();
+        
+        $contents = fread($this->threads[$name]->getInput(), 1024);
+        
+        var_dump($contents);die();
+    }
+    
+    public function treatThreadInput($name)
+    {
+        $thread = $this->threads[$name];
+        $contents = fread($thread->getInput(), 4096);
+        var_dump($contents);
     }
     
     /**
@@ -70,6 +104,7 @@ class ThreadManager
         $server->addInput($name, $pipes[0]);
         $server->addOutput($name, $pipes[1]);
         ++$this->instanciedThreads;
+        return $name;
     }
     
     /**
