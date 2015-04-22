@@ -27,13 +27,4 @@ $options = getScriptOptions($argv);
 $target = getTarget($options);
 $implodedOptions = implode(' ', $argv);
 
-$config = [
-    'WINNT' => [
-        'command' => 'start php "' . __DIR__ . DIRECTORY_SEPARATOR . $target . '" ' . $implodedOptions
-    ],
-    'Linux' => [
-        'command' => 'php "' . __DIR__ . DIRECTORY_SEPARATOR . $target . '" ' . $implodedOptions . ' &'
-    ]
-];
-
-pclose(popen($config[PHP_OS]['command'], 'r'));
+require(__DIR__ . DIRECTORY_SEPARATOR . $target);

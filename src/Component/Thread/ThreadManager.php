@@ -8,6 +8,8 @@ use Saturne\Component\Thread\ThreadGateway;
 
 use Saturne\Core\Kernel\EngineKernel;
 
+use Saturne\Component\Event\EventManager;
+
 /**
  * @name ThreadManager
  * @author Axel Venet <axel-venet@developtech.fr>
@@ -31,6 +33,20 @@ class ThreadManager
             : 'php launcher.php --target=thread'
         ;
         $this->gateway = new ThreadGateway();
+    }
+    
+    public function __destruct()
+    {
+        foreach($this->threads as $thread)
+        {
+            fclose($thread->getInput());
+            fclose($thread->getOutput());
+            proc_close($thread->getProcess());
+            unset($thread);
+        }
+        EngineKernel::getInstance()->throwEvent(EventManager::NETWORK_THREADS_CLEARED, [
+            'message' => 'Threads are now cleared'
+        ]);
     }
     
     public function launchThreads()
@@ -58,8 +74,7 @@ class ThreadManager
     {
         $name = $this->addThread();
         
-        $contents = fread($this->threads[$name]->getInput(), 1024);
-        
+        $contents = fread($this->threads[$name]->getOutput(), 1024);
         var_dump($contents);die();
     }
     
@@ -82,7 +97,7 @@ class ThreadManager
     {
         $name = "Thread_{$this->instanciedThreads}";
         
-        proc_close(proc_open("{$this->command} $name", [
+        $process = proc_open("{$this->command} --thread=$name", [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
             2 => [
@@ -92,14 +107,16 @@ class ThreadManager
                 DIRECTORY_SEPARATOR . 'thread_errors.log',
                 'a+'
             ]
-        ], $pipes));
+        ], $pipes);
         
         $this->threads[$name] =
             (new Thread())
             ->setName($name)
+            ->setProcess($process)
             ->setInput($pipes[0])
             ->setOutput($pipes[1])
         ;
+        
         $server = EngineKernel::getInstance()->getServer();
         $server->addInput($name, $pipes[0]);
         $server->addOutput($name, $pipes[1]);

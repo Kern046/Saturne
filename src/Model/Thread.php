@@ -22,6 +22,8 @@ class Thread
     private $input;
     /** @var resource **/
     private $output;
+    /** @var resource **/
+    private $process;
     /** @var array **/
     private $clients;
     
@@ -137,6 +139,27 @@ class Thread
     public function getName()
     {
         return $this->name;
+    }
+    
+    /**
+     * Set process
+     * 
+     * @param resource $process
+     * @return Thread
+     */
+    public function setProcess($process)
+    {
+        $this->process = $process;
+        
+        return $this;
+    }
+    
+    /**
+     * @return resource
+     */
+    public function getProcess()
+    {
+        return $this->process;
     }
     
     /**
