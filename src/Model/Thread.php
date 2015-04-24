@@ -25,7 +25,7 @@ class Thread
     /** @var resource **/
     private $process;
     /** @var array **/
-    private $clients;
+    private $clients = [];
     
     public function __construct()
     {

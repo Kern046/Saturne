@@ -18,6 +18,7 @@ class EventManager implements EventManagerInterface
     const NETWORK_SERVER_LISTENING = 'network-server-listening';
     const NETWORK_NEW_CONNECTION = 'network-new-connection';
     const NETWORK_SHUTDOWN = 'network-shutdown';
+    const NETWORK_NEW_THREAD = 'network-new-thread';
     const NETWORK_THREADS_CLEARED = 'network-threads-cleared';
     
     const CLIENT_AFFECTION = 'client-affection';

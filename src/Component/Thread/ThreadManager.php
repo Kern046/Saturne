@@ -29,8 +29,8 @@ class ThreadManager
     {
         $this->command =
             (PHP_OS === 'WINNT')
-            ? 'start php launcher.php --target=thread'
-            : 'php launcher.php --target=thread'
+            ? 'start php ' . __DIR__ . '/../../launcher.php --target=thread'
+            : 'php ' . __DIR__ . '/../../launcher.php --target=thread'
         ;
         $this->gateway = new ThreadGateway();
     }
@@ -62,7 +62,6 @@ class ThreadManager
         {
             $thread = $this->initThread();
             $totalMemory += $thread->getAllocatedMemory();
-            
             if($totalMemory > 2000000)
             {
                 $init = false;
@@ -74,15 +73,25 @@ class ThreadManager
     {
         $name = $this->addThread();
         
-        $contents = fread($this->threads[$name]->getOutput(), 1024);
-        var_dump($contents);die();
+        $data = json_decode(fread($this->threads[$name]->getOutput(), 1024), true);
+        
+        $this->threads[$name]
+            ->setMemory($data['memory'])
+            ->setAllocatedMemory($data['allocated-memory'])
+        ;
+        
+        return $this->threads[$name];
     }
     
     public function treatThreadInput($name)
     {
         $thread = $this->threads[$name];
         $contents = fread($thread->getInput(), 4096);
-        var_dump($contents);
+        
+        if(empty($contents))
+        {
+            return false;
+        }
     }
     
     /**
@@ -95,6 +104,7 @@ class ThreadManager
     
     public function addThread()
     {
+        ++$this->instanciedThreads;
         $name = "Thread_{$this->instanciedThreads}";
         
         $process = proc_open("{$this->command} --thread=$name", [
@@ -117,10 +127,15 @@ class ThreadManager
             ->setOutput($pipes[1])
         ;
         
-        $server = EngineKernel::getInstance()->getServer();
+        $engine = EngineKernel::getInstance();
+        
+        $server = $engine->getServer();
         $server->addInput($name, $pipes[0]);
         $server->addOutput($name, $pipes[1]);
-        ++$this->instanciedThreads;
+        
+        $engine->throwEvent(EventManager::NETWORK_NEW_THREAD, [
+            'message' => "$name is now initialized"
+        ]);
         return $name;
     }
     

@@ -12,7 +12,6 @@ use Saturne\Component\Logger\FileLogger;
 use Saturne\Component\LoadBalancer\LoadBalancer;
 
 use Saturne\Component\Client\ClientManager;
-use Saturne\Component\Client\ClientListener;
 
 use Saturne\Component\Memory\MemoryManager;
 

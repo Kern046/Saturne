@@ -20,6 +20,7 @@ class CliLogger implements LoggerInterface
         EventManager::NETWORK_NEW_CONNECTION => 'log',
         EventManager::NETWORK_SHUTDOWN => 'log',
         EventManager::NETWORK_THREADS_CLEARED => 'log',
+        EventManager::NETWORK_NEW_THREAD => 'log',
         EventManager::CLIENT_AFFECTION => 'log',
     ];
     
