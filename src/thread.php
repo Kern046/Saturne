@@ -6,3 +6,4 @@ fputs(STDOUT, json_encode([
     'memory' => memory_get_usage(),
     'allocated-memory' => memory_get_usage(true)
 ]));
+sleep(rand(2,10));

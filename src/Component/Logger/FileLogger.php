@@ -19,6 +19,7 @@ class FileLogger implements LoggerInterface
         EventManager::NETWORK_SERVER_LISTENING => 'log',
         EventManager::NETWORK_NEW_CONNECTION => 'log',
         EventManager::NETWORK_SHUTDOWN => 'log',
+        EventManager::NETWORK_THREAD_SHUTDOWN => 'log',
         EventManager::NETWORK_THREADS_CLEARED => 'log',
         EventManager::NETWORK_NEW_THREAD => 'log',
         EventManager::CLIENT_AFFECTION => 'log'

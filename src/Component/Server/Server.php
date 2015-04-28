@@ -36,11 +36,10 @@ class Server implements ServerInterface
             $inputs = $this->getMappedInputs();
             $outputs = $this->getMappedOutputs();
             $errors = null;
-            if(($nbUpdatedStreams = stream_select($inputs, $outputs, $errors, 2000000000000000000000000000000)) == 0)
+            if(($nbUpdatedStreams = stream_select($inputs, $outputs, $errors, 20)) == 0)
             {
                 continue;
             }
-            var_dump($errors);die;
             $this->treatInputs($inputs);
             $this->treatOutputs($outputs);
         }

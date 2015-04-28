@@ -90,7 +90,7 @@ class ThreadManager
         
         if(empty($contents))
         {
-            return false;
+            $this->removeThread($name, "{$this->threads[$name]->getName()} is not running anymore");
         }
     }
     
@@ -141,11 +141,13 @@ class ThreadManager
     
     /**
      * Delete a thread
+     * The reaosn is the message which will appear in the logs
      * 
      * @param string $name
+     * @param string $reason
      * @throws \InvalidArgumentException
      */
-    public function removeThread($name, $shutdown = false)
+    public function removeThread($name, $reason, $shutdown = false)
     {
         if(!isset($this->threads[$name]))
         {
@@ -155,7 +157,19 @@ class ThreadManager
         {
             $this->shutdownThread($this->threads[$name]);
         }
+        fclose($this->threads[$name]->getInput());
+        fclose($this->threads[$name]->getOutput());
+        proc_close($this->threads[$name]->getProcess());
         unset($this->threads[$name]);
+        
+        $engine = EngineKernel::getInstance();
+        
+        $engine->getServer()->removeInput($name);
+        $engine->getServer()->removeOutput($name);
+        
+        $engine->throwEvent(EventManager::NETWORK_THREAD_SHUTDOWN, [
+            'message' => $reason
+        ]);
     }
     
     /**
