@@ -15,14 +15,12 @@ use Saturne\Component\Event\EventManager;
  */
 class ClientManager implements ClientManagerInterface
 {
-    /** @var ClientActionManager **/
-    private $actionManager;
     /** @var array **/
     private $clients;
     
     public function __construct()
     {
-        $this->actionManager = new ClientActionManager();
+        EngineKernel::getInstance()->getContainer()->set('saturne.client_action_manager', new ClientActionManager());
     }
     
     public function cleanClients()
@@ -46,12 +44,7 @@ class ClientManager implements ClientManagerInterface
             'message' => "New connection from {$data['ip']}:{$data['port']}"
         ]);
         
-        EngineKernel::getInstance()->getLoadBalancer()->affectClient($client);
-    }
-    
-    public function getActionManager()
-    {
-        return $this->actionManager;
+        EngineKernel::getInstance()->get('saturne.load_balancer')->affectClient($client);
     }
 }
 

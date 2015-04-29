@@ -4,3 +4,4 @@ require(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR 
 
 $engine = Saturne\Core\Kernel\EngineKernel::getInstance();
 $engine->init();
+$engine->run();

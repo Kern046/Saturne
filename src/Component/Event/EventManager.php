@@ -9,7 +9,7 @@ namespace Saturne\Component\Event;
 class EventManager implements EventManagerInterface
 {
     /** @var array <Object> **/
-    private $listeners;
+    private $listeners = [];
     
     const ENGINE_INITIALIZED = 'engine-initialized';
     const ENGINE_STATUS_REQUEST = 'engine-status-request';

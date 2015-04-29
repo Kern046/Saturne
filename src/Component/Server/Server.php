@@ -50,7 +50,7 @@ class Server implements ServerInterface
      */
     public function treatInputs($inputs)
     {
-        $threadManager = EngineKernel::getInstance()->getThreadManager();
+        $threadManager = EngineKernel::getInstance()->get('saturne.thread_manager');
         
         foreach($inputs as $input)
         {
@@ -72,7 +72,7 @@ class Server implements ServerInterface
     {
         foreach($outputs as $output)
         {
-            $name = array_search($input, $this->outputs);
+            $name = array_search($output, $this->outputs);
         }
     }
     
@@ -88,7 +88,7 @@ class Server implements ServerInterface
             'peername' => $peername,
         ]);
         
-        EngineKernel::getInstance()->getClientManager()->getActionManager()->treatAction($networkData);
+        EngineKernel::getInstance()->get('saturne.client_action_manager')->treatAction($networkData);
     }
     
     /**

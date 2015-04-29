@@ -2,12 +2,6 @@
 
 namespace Saturne\Core\Kernel;
 
-use Saturne\Component\Client\ClientManager;
-use Saturne\Component\Event\EventManager;
-use Saturne\Component\Server\Server;
-use Saturne\Component\LoadBalancer\LoadBalancer;
-use Saturne\Component\Thread\ThreadManager;
-
 /**
  * @name KernelInterface
  * @author Axel Venet <axel-venet@developtech.fr>
@@ -15,75 +9,41 @@ use Saturne\Component\Thread\ThreadManager;
 interface KernelInterface
 {
     /**
-     * Initialize the engine and set all components
+     * Initialize the engine and set all components in the container
      */
     public function init();
     
     /**
-     * Initialize the EventManager
+     * Run the engine
      */
-    public function setEventManager();
+    public function run();
     
     /**
-     * Get the EventManager
-     * 
-     * @return EventManager
+     * Set the container
      */
-    public function getEventManager();
+    public function setContainer();
+    
+    /**
+     * Get the container
+     * 
+     * @return \Saturne\Core\Container\KernelContainer
+     */
+    public function getContainer();
+    
+    /**
+     * Shorcut to access a container item
+     * 
+     * @param string $name
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
+    public function get($name);
     
     /**
      * Add loggers as listeners.
      * If the script is run by in CLI, a dedicated graphic logger is added
      */
     public function setLoggers();
-    
-    /**
-     * Initialize the ThreadManager
-     */
-    public function setThreadManager();
-    
-    /**
-     * Get the ThreadManager
-     * 
-     * @return ThreadManager
-     */
-    public function getThreadManager();
-    
-    /**
-     * Add the LoadBalancer as a listener
-     */
-    public function setLoadBalancer();
-    
-    /**
-     * Get the LoadBalancer
-     * 
-     * @return LoadBalancer
-     */
-    public function getLoadBalancer();
-    
-    /**
-     * Set the clientManager and add ClientListener as an event listener
-     */
-    public function setClientManager();
-    
-    /**
-     * Get the ClientManager
-     * 
-     * @return ClientManager
-     */
-    public function getClientManager();
-    
-    /**
-     * Set the Server
-     */
-    public function setServer();
-    
-    /**
-     * Get the Server
-     * 
-     * @return Server
-     */
-    public function getServer();
     
     /**
      * Send an event to the EventManager for a broadcast diffusion to the listeners.

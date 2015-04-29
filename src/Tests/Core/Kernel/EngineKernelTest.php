@@ -14,6 +14,13 @@ class EngineKernelTest extends \PHPUnit_Framework_TestCase
     {
         $this->engine = EngineKernel::getInstance();
         $this->engine->init();
+        $this->engine->setClientManager();
+        $this->engine->setEventManager();
+        $this->engine->setLoadBalancer();
+        $this->engine->setLoggers();
+        $this->engine->setMemoryManager();
+        $this->engine->setServer();
+        $this->engine->setThreadManager();
     }
     
     public function testGetEventManager()

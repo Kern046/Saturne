@@ -3,19 +3,15 @@
 namespace Saturne\Core\Kernel;
 
 use Saturne\Component\Event\EventManager;
-
 use Saturne\Component\Thread\ThreadManager;
-
 use Saturne\Component\Logger\CliLogger;
 use Saturne\Component\Logger\FileLogger;
-
 use Saturne\Component\LoadBalancer\LoadBalancer;
-
 use Saturne\Component\Client\ClientManager;
-
 use Saturne\Component\Memory\MemoryManager;
-
 use Saturne\Component\Server\Server;
+
+use Saturne\Core\Container\KernelContainer;
 
 /**
  * @name EngineKernel
@@ -25,18 +21,8 @@ class EngineKernel implements KernelInterface
 {
     /** @var EngineKernel **/
     private static $instance;
-    /** @var EventManager **/
-    private $eventManager;
-    /** @var ThreadManager **/
-    private $threadManager;
-    /** @var LoadBalancer **/
-    private $loadBalancer;
-    /** @var ClientManager **/
-    private $clientManager;
-    /** @var MemoryManager **/
-    private $memoryManager;
-    /** @var Server **/
-    private $server;
+    /** @var KernelContainer **/
+    private $container;
     
     private function __construct(){}
     
@@ -45,26 +31,81 @@ class EngineKernel implements KernelInterface
      */
     public function init()
     {
-        $this->setMemoryManager();
-        $this->setEventManager();
+        $memoryManager = new MemoryManager();
+        
+        $this->setContainer();
+        $this->container->set('saturne.memory_manager', $memoryManager);
+        $this->container->set('saturne.event_manager', new EventManager());
+        $this->container->set('saturne.logger.cli', new CliLogger());
+        $this->container->set('saturne.logger.file', new FileLogger());
+        $this->container->set('saturne.thread_manager', new ThreadManager());
+        $this->container->set('saturne.load_balancer', new LoadBalancer());
+        $this->container->set('saturne.client_manager', new ClientManager());
+        $this->container->set('saturne.server', new Server());
+        
         $this->setLoggers();
-        $this->setThreadManager();
-        $this->setLoadBalancer();
-        $this->setClientManager();
-        $this->setServer();
-        $this->memoryManager->refreshMemory();
+        
+        
+        
+        $this->container->get('saturne.memory_manager')->refreshMemory();
         
         $this->throwEvent(EventManager::ENGINE_INITIALIZED, [
-            'message' => "Engine is now initialized with {$this->memoryManager->getMemory()}/{$this->memoryManager->getAllocatedMemory()} bytes"
+            'message' => "Engine is now initialized with {$memoryManager->getMemory()}/{$memoryManager->getAllocatedMemory()} bytes"
         ]);
-        
-        $this->threadManager->launchThreads();
-        $this->server->listen();
     }
     
+    /**
+     * {@inheritdoc}
+     */
+    public function setContainer()
+    {
+        $this->container = new KernelContainer();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function run()
+    {
+        $this->get('saturne.thread_manager')->launchThreads();
+        $this->get('saturne.server')->listen();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function get($name)
+    {
+        return $this->container->get($name);
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function setLoggers()
+    {
+        $eventManager = $this->container->get('saturne.event_manager');
+        if(PHP_SAPI === 'cli')
+        {
+            $eventManager->addListener(new CliLogger());
+        }
+        $eventManager->addListener(new FileLogger());
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     public function shutdown()
     {
-        $this->clientManager->cleanClients();
+        $this->get('saturne.client_manager')->cleanClients();
         $this->throwEvent(EventManager::ENGINE_SHUTDOWN, [
             'message' => 'Engine will now shutdown'
         ]);
@@ -73,119 +114,14 @@ class EngineKernel implements KernelInterface
     /**
      * {@inheritdoc}
      */
-    public function setMemoryManager()
-    {
-        $this->memoryManager = new MemoryManager();
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function setEventManager()
-    {
-        $this->eventManager = new EventManager();
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getEventManager()
-    {
-        return $this->eventManager;
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function setThreadManager()
-    {
-        $this->threadManager = new ThreadManager();
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getThreadManager()
-    {
-        return $this->threadManager;
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function setServer()
-    {
-        $this->server = new Server();
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getMemoryManager()
-    {
-        return $this->memoryManager;
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getServer()
-    {
-        return $this->server;
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function setLoadBalancer()
-    {
-        $this->loadBalancer = new LoadBalancer();
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getLoadBalancer()
-    {
-        return $this->loadBalancer;
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function setLoggers()
-    {
-        if(PHP_SAPI === 'cli')
-        {
-            $this->eventManager->addListener(new CliLogger());
-        }
-        $this->eventManager->addListener(new FileLogger());
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function setClientManager()
-    {
-        $this->clientManager = new ClientManager();
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getClientManager()
-    {
-        return $this->clientManager;
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
     public function throwEvent($event, $data = [])
     {
-        $this->eventManager->transmit($event, $data);
+        $this->get('saturne.event_manager')->transmit($event, $data);
     }
     
+    /**
+     * {@inheritdoc}
+     */
     public static function getInstance()
     {
         if(self::$instance === null)
