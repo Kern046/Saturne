@@ -11,7 +11,7 @@ class MemoryManagerTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->manager = new MemoryManager();
+        $this->manager = new MemoryManager($this->getEngineMock());
     }
     
     public function testRefreshMemory()
@@ -25,5 +25,15 @@ class MemoryManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('integer', $memory);
         $this->assertGreaterThan(0, $allocatedMemory);
         $this->assertInternalType('integer', $allocatedMemory);
+    }
+    
+    public function getEngineMock()
+    {
+        $engineMock = $this
+            ->getMockBuilder('Saturne\Core\Kernel\EngineKernel')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+        return $engineMock;
     }
 }

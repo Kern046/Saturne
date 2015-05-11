@@ -11,7 +11,7 @@ class FileLoggerTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->logger = new FileLogger();
+        $this->logger = new FileLogger($this->getEngineMock());
     }
     
     /**
@@ -20,5 +20,15 @@ class FileLoggerTest extends \PHPUnit_Framework_TestCase
     public function testInvalidLog()
     {
         $this->logger->log([]);
+    }
+    
+    public function getEngineMock()
+    {
+        $engineMock = $this
+            ->getMockBuilder('Saturne\Core\Kernel\EngineKernel')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+        return $engineMock;
     }
 }

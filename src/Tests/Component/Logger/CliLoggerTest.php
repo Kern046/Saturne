@@ -11,15 +11,13 @@ class CliLoggerTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->logger = new CliLogger();
+        $this->logger = new CliLogger($this->getEngineMock());
     }
     
     public function testLog()
     {
         ob_start();
-        $this->logger->log([
-            'message' => 'test '
-        ]);
+        $this->logger->log(['message' => 'test ']);
         
         $this->assertContains('test', explode(' ', ob_get_contents()));
         ob_end_clean();
@@ -31,5 +29,15 @@ class CliLoggerTest extends \PHPUnit_Framework_TestCase
     public function testInvalidLog()
     {
         $this->logger->log([]);
+    }
+    
+    public function getEngineMock()
+    {
+        $engineMock = $this
+            ->getMockBuilder('Saturne\Core\Kernel\EngineKernel')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+        return $engineMock;
     }
 }

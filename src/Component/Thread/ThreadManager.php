@@ -40,10 +40,7 @@ class ThreadManager
     {
         foreach($this->threads as $thread)
         {
-            fclose($thread->getInput());
-            fclose($thread->getOutput());
-            proc_close($thread->getProcess());
-            unset($thread);
+            $this->removeThread($thread->getName(), "{$thread->getName()} shutdown");
         }
         $this->engine->throwEvent(EventManager::NETWORK_THREADS_CLEARED, [
             'message' => 'Threads are now cleared'
@@ -91,7 +88,7 @@ class ThreadManager
         
         if(empty($contents))
         {
-            $this->removeThread($name, "{$this->threads[$name]->getName()} is not running anymore");
+            $this->removeThread($name, "$name is not running anymore");
         }
     }
     
@@ -140,7 +137,7 @@ class ThreadManager
     
     /**
      * Delete a thread
-     * The reaosn is the message which will appear in the logs
+     * The reason is the message which will appear in the logs
      * 
      * @param string $name
      * @param string $reason
@@ -156,14 +153,14 @@ class ThreadManager
         {
             $this->shutdownThread($this->threads[$name]);
         }
+        $server = $this->engine->get('saturne.server');
+        $server->removeInput($name);
+        $server->removeOutput($name);
+        
         fclose($this->threads[$name]->getInput());
         fclose($this->threads[$name]->getOutput());
         proc_close($this->threads[$name]->getProcess());
         unset($this->threads[$name]);
-        
-        $server = $this->engine->get('saturne.server');
-        $server->removeInput($name);
-        $server->removeOutput($name);
         
         $this->engine->throwEvent(EventManager::NETWORK_THREAD_SHUTDOWN, [
             'message' => $reason

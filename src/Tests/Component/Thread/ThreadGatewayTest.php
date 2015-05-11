@@ -15,7 +15,7 @@ class ThreadGatewayTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->gateway = new ThreadGateway();
+        $this->gateway = new ThreadGateway($this->getEngineMock());
         
         $handle = fopen('php://temp', 'r+');
         
@@ -41,5 +41,15 @@ class ThreadGatewayTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('command', $output);
         $this->assertEquals('test', $output['command']);
         
+    }
+    
+    public function getEngineMock()
+    {
+        $engineMock = $this
+            ->getMockBuilder('Saturne\Core\Kernel\EngineKernel')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+        return $engineMock;
     }
 }

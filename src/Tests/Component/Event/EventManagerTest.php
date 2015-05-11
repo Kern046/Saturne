@@ -12,7 +12,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->eventManager = new EventManager();
+        $this->eventManager = new EventManager($this->getEngineMock());
     }
     
     public function testFunctional()
@@ -40,5 +40,15 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     public function testInvalidRemoveListener()
     {
         $this->eventManager->removeListener(new \stdClass());
+    }
+    
+    public function getEngineMock()
+    {
+        $engineMock = $this
+            ->getMockBuilder('Saturne\Core\Kernel\EngineKernel')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+        return $engineMock;
     }
 }
