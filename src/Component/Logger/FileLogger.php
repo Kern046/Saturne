@@ -26,9 +26,12 @@ class FileLogger implements LoggerInterface
     ];
     /** @var string **/
     private $dir;
+    /** @var EngineKernel **/
+    private $engine;
     
-    public function __construct()
+    public function __construct($engine)
     {
+        $this->engine = $engine;
         $this->dir = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'logs';
         if(!is_dir($this->dir))
         {

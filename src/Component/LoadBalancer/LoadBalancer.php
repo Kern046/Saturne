@@ -18,9 +18,12 @@ use Saturne\Component\Event\EventManager;
  */
 class LoadBalancer implements LoadBalancerInterface
 {
-    public function __construct()
+    /** @var EngineKernel **/
+    private $engine;
+    
+    public function __construct($engine)
     {
-        
+        $this->engine = $engine;
     }
     
     /**
@@ -28,7 +31,7 @@ class LoadBalancer implements LoadBalancerInterface
      */
     public function affectClient(Client $client)
     {
-        EngineKernel::getInstance()->throwEvent(EventManager::CLIENT_AFFECTION, [
+        $this->engine->throwEvent(EventManager::CLIENT_AFFECTION, [
             'message' => "Client {$client->getIp()}:{$client->getPort()} is now affected"
         ]);
     }

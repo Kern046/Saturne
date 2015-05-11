@@ -24,6 +24,13 @@ class CliLogger implements LoggerInterface
         EventManager::NETWORK_NEW_THREAD => 'log',
         EventManager::CLIENT_AFFECTION => 'log',
     ];
+    /** @var EngineKernel **/
+    private $engine;
+    
+    public function __construct($engine)
+    {
+        $this->engine = $engine;
+    }
     
     /**
      * {@inheritdoc}

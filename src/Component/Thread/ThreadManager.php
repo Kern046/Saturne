@@ -22,15 +22,18 @@ class ThreadManager
     private $instanciedThreads = 0;
     /** @var string **/
     private $command;
+    /** @var EngineKernel **/
+    private $engine;
     
-    public function __construct()
+    public function __construct($engine)
     {
+        $this->engine = $engine;
         $this->command =
             (PHP_OS === 'WINNT')
             ? 'start php ' . __DIR__ . '/../../launcher.php --target=thread'
             : 'php ' . __DIR__ . '/../../launcher.php --target=thread'
         ;
-        EngineKernel::getInstance()->getContainer()->set('saturne.thread_gateway', new ThreadGateway());
+        $engine->getContainer()->set('saturne.thread_gateway', new ThreadGateway($engine));
     }
     
     public function __destruct()
@@ -42,7 +45,7 @@ class ThreadManager
             proc_close($thread->getProcess());
             unset($thread);
         }
-        EngineKernel::getInstance()->throwEvent(EventManager::NETWORK_THREADS_CLEARED, [
+        $this->engine->throwEvent(EventManager::NETWORK_THREADS_CLEARED, [
             'message' => 'Threads are now cleared'
         ]);
     }
@@ -51,7 +54,7 @@ class ThreadManager
     {
         $init = true;
         
-        $memoryManager = EngineKernel::getInstance()->get('saturne.memory_manager');
+        $memoryManager = $this->engine->get('saturne.memory_manager');
         $memoryManager->refreshMemory();
         
         $totalMemory = $memoryManager->getAllocatedMemory();
@@ -125,13 +128,11 @@ class ThreadManager
             ->setOutput($pipes[1])
         ;
         
-        $engine = EngineKernel::getInstance();
-        
-        $server = $engine->get('saturne.server');
+        $server = $this->engine->get('saturne.server');
         $server->addInput($name, $pipes[0]);
         $server->addOutput($name, $pipes[1]);
         
-        $engine->throwEvent(EventManager::NETWORK_NEW_THREAD, [
+        $this->engine->throwEvent(EventManager::NETWORK_NEW_THREAD, [
             'message' => "$name is now initialized"
         ]);
         return $name;
@@ -160,13 +161,11 @@ class ThreadManager
         proc_close($this->threads[$name]->getProcess());
         unset($this->threads[$name]);
         
-        $engine = EngineKernel::getInstance();
-        
-        $server = $engine->get('saturne.server');
+        $server = $this->engine->get('saturne.server');
         $server->removeInput($name);
         $server->removeOutput($name);
         
-        $engine->throwEvent(EventManager::NETWORK_THREAD_SHUTDOWN, [
+        $this->engine->throwEvent(EventManager::NETWORK_THREAD_SHUTDOWN, [
             'message' => $reason
         ]);
     }
@@ -178,7 +177,7 @@ class ThreadManager
      */
     public function shutdownThread(Thread $thread)
     {
-        EngineKernel::getInstance()->get('saturne.thread_gateway')->writeTo($thread, [
+        $this->engine->get('saturne.thread_gateway')->writeTo($thread, [
             'command' => 'shutdown'
         ]);
     }

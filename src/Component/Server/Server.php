@@ -17,6 +17,14 @@ class Server implements ServerInterface
     private $outputs = [];
     /** @var boolean **/
     private $listen = true;
+    /** @var EngineKernel **/
+    private $engine;
+    
+    public function __construct($engine)
+    {
+        $this->engine = $engine;
+    }
+    
     /**
      * {@inheritdoc}
      */
@@ -24,7 +32,7 @@ class Server implements ServerInterface
     {
         $this->addInput('master', stream_socket_server('tcp://127.0.0.1:8889', $errno, $errstr));
         
-        EngineKernel::getInstance()->throwEvent(EventManager::NETWORK_SERVER_LISTENING, [
+        $this->engine->throwEvent(EventManager::NETWORK_SERVER_LISTENING, [
             'protocol' => 'tcp',
             'ip' => '127.0.0.1',
             'port' => 8889,
@@ -50,7 +58,7 @@ class Server implements ServerInterface
      */
     public function treatInputs($inputs)
     {
-        $threadManager = EngineKernel::getInstance()->get('saturne.thread_manager');
+        $threadManager = $this->engine->get('saturne.thread_manager');
         
         foreach($inputs as $input)
         {
@@ -88,7 +96,7 @@ class Server implements ServerInterface
             'peername' => $peername,
         ]);
         
-        EngineKernel::getInstance()->get('saturne.client_action_manager')->treatAction($networkData);
+        $this->engine->get('saturne.client_action_manager')->treatAction($networkData);
     }
     
     /**
@@ -111,10 +119,10 @@ class Server implements ServerInterface
     {
         $this->listen = false;
         
-        EngineKernel::getInstance()->throwEvent(EventManager::NETWORK_SHUTDOWN, [
+        $this->engine->throwEvent(EventManager::NETWORK_SHUTDOWN, [
             'message' => 'Server will now shutdown due to user request'
         ]);
-        EngineKernel::getInstance()->shutdown();
+        $this->engine->shutdown();
     }
     
     /**

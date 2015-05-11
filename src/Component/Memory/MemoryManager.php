@@ -20,6 +20,13 @@ class MemoryManager implements MemoryManagerInterface
     private $events = [
         EventManager::ENGINE_STATUS_REQUEST => 'refreshMemory'
     ];
+    /** @var EngineKernel **/
+    private $engine;
+    
+    public function __construct($engine)
+    {
+        $this->engine = $engine;
+    }
     
     /**
      * {inheritdoc}

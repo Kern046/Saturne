@@ -10,6 +10,13 @@ use Saturne\Model\Thread;
  */
 class ThreadGateway
 {
+    /** @var EngineKernel **/
+    private $engine;
+    
+    public function __construct($engine)
+    {
+        $this->engine = $engine;
+    }
     /**
      * Send JSON data to a thread
      * 

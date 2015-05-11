@@ -17,10 +17,13 @@ class ClientManager implements ClientManagerInterface
 {
     /** @var array **/
     private $clients;
+    /** @var EngineKernel **/
+    private $engine;
     
-    public function __construct()
+    public function __construct($engine)
     {
-        EngineKernel::getInstance()->getContainer()->set('saturne.client_action_manager', new ClientActionManager());
+        $this->engine = $engine;
+        $engine->getContainer()->set('saturne.client_action_manager', new ClientActionManager($engine));
     }
     
     public function cleanClients()
@@ -40,11 +43,11 @@ class ClientManager implements ClientManagerInterface
             ->setUserAgent($data['user-agent'])
         ;
         
-        EngineKernel::getInstance()->throwEvent(EventManager::NETWORK_NEW_CONNECTION, [
+        $this->engine->throwEvent(EventManager::NETWORK_NEW_CONNECTION, [
             'message' => "New connection from {$data['ip']}:{$data['port']}"
         ]);
         
-        EngineKernel::getInstance()->get('saturne.load_balancer')->affectClient($client);
+        $this->engine->get('saturne.load_balancer')->affectClient($client);
     }
 }
 

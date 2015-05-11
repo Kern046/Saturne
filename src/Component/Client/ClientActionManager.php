@@ -6,10 +6,18 @@ use Saturne\Core\Kernel\EngineKernel;
 
 class ClientActionManager
 {
+    /** @var array **/
     private $actions = [
         'client:connect' => ['saturne.client_manager', 'createConnection'],
         'server:shutdown' => ['saturne.server', 'shutdown']
     ];
+    /** @var EngineKernel **/
+    private $engine;
+    
+    public function __construct($engine)
+    {
+        $this->engine = $engine;
+    }
     
     public function treatAction($networkData)
     {
@@ -19,6 +27,6 @@ class ClientActionManager
         {
             throw new \InvalidArgumentException('The requested action is not registered');
         }
-        EngineKernel::getInstance()->get($this->actions[$action][0])->{$this->actions[$action][1]}($networkData);
+        $this->engine->get($this->actions[$action][0])->{$this->actions[$action][1]}($networkData);
     }
 }

@@ -5,17 +5,19 @@ namespace Saturne\Core\Container;
 class KernelContainer implements ContainerInterface
 {
     /** @var array **/
-    protected $items;
+    protected $items = [];
     
+    /**
+     * {@inheritdoc}
+     */
     public function set($name, $item)
     {
-        if($this->has($name))
-        {
-            throw new \InvalidArgumentException("$name is already affected");
-        }
         $this->items[$name] = $item;
     }
     
+    /**
+     * {@inheritdoc}
+     */
     public function get($name)
     {
         if(!$this->has($name))
@@ -25,6 +27,9 @@ class KernelContainer implements ContainerInterface
         return $this->items[$name];
     }
     
+    /**
+     * {@inheritdoc}
+     */
     public function has($name)
     {
         return isset($this->items[$name]);

@@ -19,39 +19,26 @@ use Saturne\Core\Container\KernelContainer;
  */
 class EngineKernel implements KernelInterface
 {
-    /** @var EngineKernel **/
-    private static $instance;
     /** @var KernelContainer **/
     private $container;
-    
-    private function __construct(){}
     
     /**
      * {@inheritdoc}
      */
     public function init()
     {
-        $memoryManager = new MemoryManager();
-        
         $this->setContainer();
-        $this->container->set('saturne.memory_manager', $memoryManager);
-        $this->container->set('saturne.event_manager', new EventManager());
-        $this->container->set('saturne.logger.cli', new CliLogger());
-        $this->container->set('saturne.logger.file', new FileLogger());
-        $this->container->set('saturne.thread_manager', new ThreadManager());
-        $this->container->set('saturne.load_balancer', new LoadBalancer());
-        $this->container->set('saturne.client_manager', new ClientManager());
-        $this->container->set('saturne.server', new Server());
+        
+        $this->container->set('saturne.event_manager', new EventManager($this));
+        $this->container->set('saturne.memory_manager', new MemoryManager($this));
+        $this->container->set('saturne.logger.cli', new CliLogger($this));
+        $this->container->set('saturne.logger.file', new FileLogger($this));
+        $this->container->set('saturne.thread_manager', new ThreadManager($this));
+        $this->container->set('saturne.load_balancer', new LoadBalancer($this));
+        $this->container->set('saturne.client_manager', new ClientManager($this));
+        $this->container->set('saturne.server', new Server($this));
         
         $this->setLoggers();
-        
-        
-        
-        $this->container->get('saturne.memory_manager')->refreshMemory();
-        
-        $this->throwEvent(EventManager::ENGINE_INITIALIZED, [
-            'message' => "Engine is now initialized with {$memoryManager->getMemory()}/{$memoryManager->getAllocatedMemory()} bytes"
-        ]);
     }
     
     /**
@@ -75,6 +62,13 @@ class EngineKernel implements KernelInterface
      */
     public function run()
     {
+        $memoryManager = $this->container->get('saturne.memory_manager');
+        $memoryManager->refreshMemory();
+        
+        $this->throwEvent(EventManager::ENGINE_INITIALIZED, [
+            'message' => "Engine is now initialized with {$memoryManager->getMemory()}/{$memoryManager->getAllocatedMemory()} bytes"
+        ]);
+            
         $this->get('saturne.thread_manager')->launchThreads();
         $this->get('saturne.server')->listen();
     }
@@ -95,9 +89,9 @@ class EngineKernel implements KernelInterface
         $eventManager = $this->container->get('saturne.event_manager');
         if(PHP_SAPI === 'cli')
         {
-            $eventManager->addListener(new CliLogger());
+            $eventManager->addListener($this->container->get('saturne.logger.cli'));
         }
-        $eventManager->addListener(new FileLogger());
+        $eventManager->addListener($this->container->get('saturne.logger.file'));
     }
     
     /**
@@ -117,17 +111,5 @@ class EngineKernel implements KernelInterface
     public function throwEvent($event, $data = [])
     {
         $this->get('saturne.event_manager')->transmit($event, $data);
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public static function getInstance()
-    {
-        if(self::$instance === null)
-        {
-            self::$instance = new self();
-        }
-        return self::$instance;
     }
 }

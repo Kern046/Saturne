@@ -6,11 +6,9 @@ interface ContainerInterface
 {
     /**
      * Set an item in the container
-     * Throws exception if the name is already affected
      * 
      * @param string $name
      * @param mixed $item
-     * @throws \InvalidArgumentException
      */
     public function set($name, $item);
     

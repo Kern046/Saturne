@@ -25,6 +25,13 @@ class EventManager implements EventManagerInterface
     
     const CLIENT_AFFECTION = 'client-affection';
     
+    /** @var EngineKernel **/
+    private $engine;
+    
+    public function __construct($engine)
+    {
+        $this->engine = $engine;
+    }
     /**
      * {@inheritdoc}
      */

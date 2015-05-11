@@ -52,11 +52,4 @@ interface KernelInterface
      * @param array $data
      */
     public function throwEvent($event, $data = []);
-    
-    /**
-     * Implementation of the Singleton design pattern
-     * 
-     * @return KernelInterface
-     */
-    public static function getInstance();
 }
