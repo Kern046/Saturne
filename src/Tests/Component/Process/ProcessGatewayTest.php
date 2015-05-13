@@ -1,27 +1,27 @@
 <?php
 
-namespace Saturne\Tests\Component\Thread;
+namespace Saturne\Tests\Component\Process;
 
-use Saturne\Component\Thread\ThreadGateway;
+use Saturne\Component\Process\ProcessGateway;
 
-use Saturne\Model\Thread;
+use Saturne\Model\Process;
 
-class ThreadGatewayTest extends \PHPUnit_Framework_TestCase
+class ProcessGatewayTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ThreadGateway **/
+    /** @var ProcessGateway **/
     private $gateway;
-    /** @var Thread **/
-    private $thread;
+    /** @var Process **/
+    private $process;
     
     public function setUp()
     {
-        $this->gateway = new ThreadGateway($this->getEngineMock());
+        $this->gateway = new ProcessGateway($this->getEngineMock());
         
         $handle = fopen('php://temp', 'r+');
         
-        $this->thread =
-            (new Thread())
-            ->setName('Thread_Test')
+        $this->process =
+            (new Process())
+            ->setName('Process_Test')
             ->setInput($handle)
             ->setOutput($handle)
         ;
@@ -29,18 +29,17 @@ class ThreadGatewayTest extends \PHPUnit_Framework_TestCase
     
     public function testWriteTo()
     {
-        $this->gateway->writeTo($this->thread, ['command' => 'test']);
+        $this->gateway->writeTo($this->process, ['command' => 'test']);
     }
     
     public function testRead()
     {
-        $this->gateway->writeTo($this->thread, ['command' => 'test']);
+        $this->gateway->writeTo($this->process, ['command' => 'test']);
         
-        $output = $this->gateway->read($this->thread);
+        $output = $this->gateway->read($this->process);
         
         $this->assertArrayHasKey('command', $output);
         $this->assertEquals('test', $output['command']);
-        
     }
     
     public function getEngineMock()

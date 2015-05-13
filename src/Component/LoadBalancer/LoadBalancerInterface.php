@@ -11,8 +11,8 @@ use Saturne\Model\Client;
 interface LoadBalancerInterface
 {
     /**
-     * This method compare the running threads status and choose one of them.
-     * The given client will be attached to the chosen thread.
+     * This method compare the running processes status and choose one of them.
+     * The given client will be attached to the chosen process.
      */
     public function affectClient(Client $client);
 }

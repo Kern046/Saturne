@@ -3,7 +3,7 @@
 namespace Saturne\Core\Kernel;
 
 use Saturne\Component\Event\EventManager;
-use Saturne\Component\Thread\ThreadManager;
+use Saturne\Component\Process\ProcessManager;
 use Saturne\Component\Logger\CliLogger;
 use Saturne\Component\Logger\FileLogger;
 use Saturne\Component\LoadBalancer\LoadBalancer;
@@ -33,7 +33,7 @@ class EngineKernel implements KernelInterface
         $this->container->set('saturne.memory_manager', new MemoryManager($this));
         $this->container->set('saturne.logger.cli', new CliLogger($this));
         $this->container->set('saturne.logger.file', new FileLogger($this));
-        $this->container->set('saturne.thread_manager', new ThreadManager($this));
+        $this->container->set('saturne.process_manager', new ProcessManager($this));
         $this->container->set('saturne.load_balancer', new LoadBalancer($this));
         $this->container->set('saturne.client_manager', new ClientManager($this));
         $this->container->set('saturne.server', new Server($this));
@@ -69,7 +69,7 @@ class EngineKernel implements KernelInterface
             'message' => "Engine is now initialized with {$memoryManager->getMemory()}/{$memoryManager->getAllocatedMemory()} bytes"
         ]);
             
-        $this->get('saturne.thread_manager')->launchThreads();
+        $this->get('saturne.process_manager')->launchProcesses();
         $this->get('saturne.server')->listen();
     }
     

@@ -5,10 +5,10 @@ namespace Saturne\Model;
 use Saturne\Model\Client;
 
 /**
- * @name Thread
+ * @name Process
  * @author Axel Venet <axel-venet@developtech.fr>
  */
-class Thread
+class Process
 {
     /** @var string **/
     private $name;
@@ -16,7 +16,7 @@ class Thread
     private $memory;
     /** @var integer **/
     private $allocatedMemory;
-    /** @var integer **/
+    /** @var \DateTime **/
     private $startTime;
     /** @var resource **/
     private $input;
@@ -34,7 +34,7 @@ class Thread
     
     /**
      * @param integer $memory
-     * @return Thread
+     * @return Process
      */
     public function setMemory($memory)
     {
@@ -53,7 +53,7 @@ class Thread
     
     /**
      * @param integer $allocatedMemory
-     * @return Thread
+     * @return Process
      */
     public function setAllocatedMemory($allocatedMemory)
     {
@@ -79,10 +79,10 @@ class Thread
     }
     
     /**
-     * Set the Thread input
+     * Set the Process input
      * 
      * @param resource $input
-     * @return Thread
+     * @return Process
      */
     public function setInput($input)
     {
@@ -100,10 +100,10 @@ class Thread
     }
     
     /**
-     * Set the Thread output
+     * Set the Process output
      * 
      * @param resource $output
-     * @return Thread
+     * @return Process
      */
     public function setOutput($output)
     {
@@ -124,7 +124,7 @@ class Thread
      * Set name
      * 
      * @param string $name
-     * @return Thread
+     * @return Process
      */
     public function setName($name)
     {
@@ -145,7 +145,7 @@ class Thread
      * Set process
      * 
      * @param resource $process
-     * @return Thread
+     * @return Process
      */
     public function setProcess($process)
     {
@@ -166,7 +166,7 @@ class Thread
      * Hash a client and add it to the thread clients
      * 
      * @param Client $client
-     * @return Thread
+     * @return Process
      */
     public function addClient(Client $client)
     {
@@ -181,7 +181,7 @@ class Thread
      * Remove a client if it is stored in the current thread
      * 
      * @param Client $client
-     * @return Thread
+     * @return Process
      */
     public function removeClient(Client $client)
     {

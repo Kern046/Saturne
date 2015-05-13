@@ -19,7 +19,7 @@ class EngineKernelTest extends \PHPUnit_Framework_TestCase
         $container->set('saturne.event_manager', $this->getEventManagerMock());
         $container->set('saturne.logger.cli', $this->getCliLoggerMock());
         $container->set('saturne.logger.file', $this->getFileLoggerMock());
-        $container->set('saturne.thread_manager', $this->getThreadManagerMock());
+        $container->set('saturne.process_manager', $this->getProcessManagerMock());
         $container->set('saturne.load_balancer', $this->getLoadBalancerMock());
         $container->set('saturne.client_manager', $this->getClientManagerMock());
         $container->set('saturne.server', $this->getServerMock());
@@ -31,7 +31,7 @@ class EngineKernelTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Saturne\Component\Event\EventManager', $this->engine->get('saturne.event_manager'));
         $this->assertInstanceOf('Saturne\Component\Logger\CliLogger', $this->engine->get('saturne.logger.cli'));
         $this->assertInstanceOf('Saturne\Component\Logger\FileLogger', $this->engine->get('saturne.logger.file'));
-        $this->assertInstanceOf('Saturne\Component\Thread\ThreadManager', $this->engine->get('saturne.thread_manager'));
+        $this->assertInstanceOf('Saturne\Component\Process\ProcessManager', $this->engine->get('saturne.process_manager'));
         $this->assertInstanceOf('Saturne\Component\LoadBalancer\LoadBalancer', $this->engine->get('saturne.load_balancer'));
         $this->assertInstanceOf('Saturne\Component\Memory\MemoryManager', $this->engine->get('saturne.memory_manager'));
         $this->assertInstanceOf('Saturne\Component\Server\Server', $this->engine->get('saturne.server'));
@@ -102,16 +102,16 @@ class EngineKernelTest extends \PHPUnit_Framework_TestCase
         return $managerMock;
     }
     
-    public function getThreadManagerMock()
+    public function getProcessManagerMock()
     {
         $managerMock = $this
-            ->getMockBuilder('Saturne\Component\Thread\ThreadManager')
+            ->getMockBuilder('Saturne\Component\Process\ProcessManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
         $managerMock
             ->expects($this->any())
-            ->method('launchThreads')
+            ->method('launchProcesses')
             ->willReturn(true)
         ;
         return $managerMock;

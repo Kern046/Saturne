@@ -1,6 +1,6 @@
 <?php
 
-$name = $options['thread'];
+$name = $options['process'];
 fputs(STDOUT, json_encode([
     'emmitter' => $name,
     'memory' => memory_get_usage(),

@@ -3,7 +3,7 @@
  * The LoadBalancer is an engine component
  * When a client does an handshake request to the engine,
  * An event is triggered, and the clientManager calls the LoadBalancer.
- * It affects that client to one of the running threads
+ * It affects that client to one of the running processes
  */
 namespace Saturne\Component\LoadBalancer;
 

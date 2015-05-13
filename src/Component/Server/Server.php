@@ -58,7 +58,7 @@ class Server implements ServerInterface
      */
     public function treatInputs($inputs)
     {
-        $threadManager = $this->engine->get('saturne.thread_manager');
+        $processManager = $this->engine->get('saturne.process_manager');
         
         foreach($inputs as $input)
         {
@@ -69,7 +69,7 @@ class Server implements ServerInterface
                 $this->acceptConnection($input);
                 continue;
             }
-            $threadManager->treatThreadInput($name);
+            $processManager->treatProcessInput($name);
         }
     }
     

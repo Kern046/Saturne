@@ -1,71 +1,71 @@
 <?php
 
-namespace Saturne\Tests\Component\Thread;
+namespace Saturne\Tests\Component\Process;
 
-use Saturne\Component\Thread\ThreadManager;
+use Saturne\Component\Process\ProcessManager;
 
-class ThreadManagerTest extends \PHPUnit_Framework_TestCase
+class ProcessManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ThreadManager **/
+    /** @var ProcessManager **/
     private $manager;
     
     public function setUp()
     {
-        $this->manager = new ThreadManager($this->getEngineMock());
+        $this->manager = new ProcessManager($this->getEngineMock());
     }
     
-    public function testGetThreads()
+    public function testGetProcesses()
     {
-        $this->manager->initThread();
-        $this->manager->initThread();
-        $this->manager->initThread();
-        $threads = $this->manager->getThreads();
+        $this->manager->initProcess();
+        $this->manager->initProcess();
+        $this->manager->initProcess();
+        $processes = $this->manager->getProcesses();
         
-        $this->assertCount(3, $threads);
-        $this->assertEquals('Thread_2', $threads['Thread_2']->getName());
+        $this->assertCount(3, $processes);
+        $this->assertEquals('Process_2', $processes['Process_2']->getName());
         unset($this->manager);
     }
     
-    public function testAddThread()
+    public function testAddProcess()
     {
-        $this->manager->initThread();
-        $this->manager->initThread();
-        $this->manager->initThread();
-        $this->manager->initThread();
-        $this->manager->initThread();
+        $this->manager->initProcess();
+        $this->manager->initProcess();
+        $this->manager->initProcess();
+        $this->manager->initProcess();
+        $this->manager->initProcess();
         
-        $threads = $this->manager->getThreads();
+        $processes = $this->manager->getProcesses();
         
-        $this->assertCount(5, $threads);
-        $this->assertArrayHasKey('Thread_3', $threads);
-        $this->assertInstanceOf('Saturne\Model\Thread', $threads['Thread_4']);
+        $this->assertCount(5, $processes);
+        $this->assertArrayHasKey('Process_3', $processes);
+        $this->assertInstanceOf('Saturne\Model\Process', $processes['Process_4']);
         unset($this->manager);
     }
     
-    public function testRemoveThread()
+    public function testRemoveProcess()
     {
-        $this->manager->initThread();
-        $this->manager->initThread();
-        $this->manager->initThread();
+        $this->manager->initProcess();
+        $this->manager->initProcess();
+        $this->manager->initProcess();
         
-        $this->manager->removeThread('Thread_1', 'Thread_1 has finished tests');
+        $this->manager->removeProcess('Process_1', 'Process_1 has finished tests');
         
-        $threads = $this->manager->getThreads();
+        $processes = $this->manager->getProcesses();
         
-        $this->assertCount(2, $threads);
-        $this->assertArrayNotHasKey('Thread_1', $threads);
+        $this->assertCount(2, $processes);
+        $this->assertArrayNotHasKey('Process_1', $processes);
         unset($this->manager);
     }
     
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testInvalidRemoveThread()
+    public function testInvalidRemoveProcess()
     {
-        $this->manager->removeThread('Thread_10', 'Thread_10 has finished tests');
+        $this->manager->removeProcess('Process_10', 'Process_10 has finished tests');
     }
     
-    public function testShutdownThread()
+    public function testShutdownProcess()
     {
         $this->markTestIncomplete('Wait for shutdown functionality');
     }
@@ -87,7 +87,7 @@ class ThreadManagerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with($this->logicalOr(
                 $this->equalTo('saturne.server'),
-                $this->equalTo('saturne.thread_gateway'),
+                $this->equalTo('saturne.process_gateway'),
                 $this->equalTo('saturne.memory_manager')
             ))
             ->willReturnCallback([$this, 'getComponentMock'])
@@ -104,7 +104,7 @@ class ThreadManagerTest extends \PHPUnit_Framework_TestCase
     {
         $components = [
             'saturne.server' => 'getServerMock',
-            'saturne.thread_gateway' => 'getThreadGatewayMock',
+            'saturne.process_gateway' => 'getProcessGatewayMock',
             'saturne.memory_manager' => 'getMemoryManagerMock'
         ];
         return $this->{$components[$component]}();
@@ -140,19 +140,19 @@ class ThreadManagerTest extends \PHPUnit_Framework_TestCase
         return $serverMock;
     }
     
-    public function getThreadGatewayMock()
+    public function getProcessGatewayMock()
     {
-        $threadGatewayMock = $this
-            ->getMockBuilder('Saturne\Component\Thread\ThreadGateway')
+        $processGatewayMock = $this
+            ->getMockBuilder('Saturne\Component\Process\ProcessGateway')
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $threadGatewayMock
+        $processGatewayMock
             ->expects($this->any())
             ->method('writeTo')
             ->willReturn(true)
         ;
-        return $threadGatewayMock;
+        return $processGatewayMock;
     }
     
     public function getMemoryManagerMock()
