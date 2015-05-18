@@ -13,8 +13,7 @@
         }
     ],
     "require" : {
-        "phpunit/phpunit" : "4.4.*",
-        "phpdocumentor/phpdocumentor" : "2.*"
+        "phpunit/phpunit" : "4.4.*"
     },
     "autoload" : {
         "psr-4" : {
