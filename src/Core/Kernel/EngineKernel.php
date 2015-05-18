@@ -11,17 +11,12 @@ use Saturne\Component\Client\ClientManager;
 use Saturne\Component\Memory\MemoryManager;
 use Saturne\Component\Server\Server;
 
-use Saturne\Core\Container\KernelContainer;
-
 /**
  * @name EngineKernel
  * @authro Axel Venet <axel-venet@developtech.fr>
  */
-class EngineKernel implements KernelInterface
+class EngineKernel extends AbstractKernel
 {
-    /** @var KernelContainer **/
-    private $container;
-    
     /**
      * {@inheritdoc}
      */
@@ -44,22 +39,6 @@ class EngineKernel implements KernelInterface
     /**
      * {@inheritdoc}
      */
-    public function setContainer()
-    {
-        $this->container = new KernelContainer();
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
     public function run()
     {
         $memoryManager = $this->container->get('saturne.memory_manager');
@@ -71,14 +50,6 @@ class EngineKernel implements KernelInterface
             
         $this->get('saturne.process_manager')->launchProcesses();
         $this->get('saturne.server')->listen();
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function get($name)
-    {
-        return $this->container->get($name);
     }
     
     /**
@@ -103,13 +74,5 @@ class EngineKernel implements KernelInterface
         $this->throwEvent(EventManager::ENGINE_SHUTDOWN, [
             'message' => 'Engine will now shutdown'
         ]);
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function throwEvent($event, $data = [])
-    {
-        $this->get('saturne.event_manager')->transmit($event, $data);
     }
 }

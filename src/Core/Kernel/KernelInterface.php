@@ -19,6 +19,11 @@ interface KernelInterface
     public function run();
     
     /**
+     * Shutdown the engine
+     */
+    public function shutdown();
+    
+    /**
      * Set the container
      */
     public function setContainer();
