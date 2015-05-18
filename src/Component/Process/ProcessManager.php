@@ -4,8 +4,6 @@ namespace Saturne\Component\Process;
 
 use Saturne\Model\Process;
 
-use Saturne\Component\Process\ProcessGateway;
-
 use Saturne\Core\Kernel\EngineKernel;
 
 use Saturne\Component\Event\EventManager;
@@ -33,7 +31,6 @@ class ProcessManager
             ? 'start php ' . __DIR__ . '/../../launcher.php --target=process'
             : 'php ' . __DIR__ . '/../../launcher.php --target=process'
         ;
-        $engine->getContainer()->set('saturne.process_gateway', new ProcessGateway($engine));
     }
     
     public function __destruct()
