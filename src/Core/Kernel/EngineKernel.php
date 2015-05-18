@@ -41,7 +41,7 @@ class EngineKernel extends AbstractKernel
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run($options = [])
     {
         $memoryManager = $this->container->get('saturne.memory_manager');
         $memoryManager->refreshMemory();

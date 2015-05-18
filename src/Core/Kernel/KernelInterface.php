@@ -16,7 +16,7 @@ interface KernelInterface
     /**
      * Run the engine
      */
-    public function run();
+    public function run($options = []);
     
     /**
      * Shutdown the engine
