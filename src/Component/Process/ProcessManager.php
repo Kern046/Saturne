@@ -4,7 +4,7 @@ namespace Saturne\Component\Process;
 
 use Saturne\Model\Process;
 
-use Saturne\Core\Kernel\EngineKernel;
+use Saturne\Core\Kernel\MasterKernel;
 
 use Saturne\Component\Event\EventManager;
 
@@ -20,7 +20,7 @@ class ProcessManager
     private $instanciedProcesses = 0;
     /** @var string **/
     private $command;
-    /** @var EngineKernel **/
+    /** @var MasterKernel **/
     private $engine;
     
     public function __construct($engine)

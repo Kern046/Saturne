@@ -2,7 +2,7 @@
 
 namespace Saturne\Component\Client;
 
-use Saturne\Core\Kernel\EngineKernel;
+use Saturne\Core\Kernel\MasterKernel;
 
 class ClientActionManager
 {
@@ -11,7 +11,7 @@ class ClientActionManager
         'client:connect' => ['saturne.client_manager', 'createConnection'],
         'server:shutdown' => ['saturne.server', 'shutdown']
     ];
-    /** @var EngineKernel **/
+    /** @var MasterKernel **/
     private $engine;
     
     public function __construct($engine)

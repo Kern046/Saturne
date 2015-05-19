@@ -9,7 +9,7 @@ namespace Saturne\Component\LoadBalancer;
 
 use Saturne\Model\Client;
 
-use Saturne\Core\Kernel\EngineKernel;
+use Saturne\Core\Kernel\MasterKernel;
 use Saturne\Component\Event\EventManager;
 
 /**
@@ -18,7 +18,7 @@ use Saturne\Component\Event\EventManager;
  */
 class LoadBalancer implements LoadBalancerInterface
 {
-    /** @var EngineKernel **/
+    /** @var MasterKernel **/
     private $engine;
     
     public function __construct($engine)

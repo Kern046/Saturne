@@ -19,7 +19,7 @@ function getTarget($options)
     return
         (isset($options['target']))
         ? $options['target'] . '.php'
-        : 'engine.php'
+        : 'master.php'
     ;
 }
 

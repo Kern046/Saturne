@@ -1,16 +1,16 @@
 <?php
 namespace Saturne\Tests\Core\Kernel;
 
-use Saturne\Core\Kernel\EngineKernel;
+use Saturne\Core\Kernel\MasterKernel;
 
 class EngineKernelTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var EngineKernel **/
+    /** @var MasterKernel **/
     private $engine;
     
     public function setUp()
     {
-        $this->engine = new EngineKernel();
+        $this->engine = new MasterKernel();
         $this->engine->init();
         
         $container = $this->engine->getContainer();

@@ -2,7 +2,7 @@
 
 namespace Saturne\Component\Server;
 
-use Saturne\Core\Kernel\EngineKernel;
+use Saturne\Core\Kernel\MasterKernel;
 use Saturne\Component\Event\EventManager;
 
 /**
@@ -17,7 +17,7 @@ class Server implements ServerInterface
     private $outputs = [];
     /** @var boolean **/
     private $listen = true;
-    /** @var EngineKernel **/
+    /** @var MasterKernel **/
     private $engine;
     
     public function __construct($engine)

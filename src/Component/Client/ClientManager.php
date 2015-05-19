@@ -2,7 +2,7 @@
 
 namespace Saturne\Component\Client;
 
-use Saturne\Core\Kernel\EngineKernel;
+use Saturne\Core\Kernel\MasterKernel;
 
 use Saturne\Model\Client;
 
@@ -17,7 +17,7 @@ class ClientManager implements ClientManagerInterface
 {
     /** @var array **/
     private $clients;
-    /** @var EngineKernel **/
+    /** @var MasterKernel **/
     private $engine;
     
     public function __construct($engine)

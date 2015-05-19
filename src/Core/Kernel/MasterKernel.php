@@ -10,13 +10,13 @@ use Saturne\Component\Logger\FileLogger;
 use Saturne\Component\LoadBalancer\LoadBalancer;
 use Saturne\Component\Client\ClientManager;
 use Saturne\Component\Memory\MemoryManager;
-use Saturne\Component\Server\Server;
+use Saturne\Component\Server\MasterServer;
 
 /**
  * @name EngineKernel
  * @authro Axel Venet <axel-venet@developtech.fr>
  */
-class EngineKernel extends AbstractKernel
+class MasterKernel extends AbstractKernel
 {
     /**
      * {@inheritdoc}
@@ -33,7 +33,7 @@ class EngineKernel extends AbstractKernel
         $this->container->set('saturne.process_gateway', new MasterGateway($this));
         $this->container->set('saturne.load_balancer', new LoadBalancer($this));
         $this->container->set('saturne.client_manager', new ClientManager($this));
-        $this->container->set('saturne.server', new Server($this));
+        $this->container->set('saturne.server', new MasterServer($this));
         
         $this->setLoggers();
     }

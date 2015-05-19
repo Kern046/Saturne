@@ -7,7 +7,7 @@ use Saturne\Component\Process\ProcessGateway;
 use Saturne\Component\Logger\FileLogger;
 use Saturne\Component\Client\ClientManager;
 use Saturne\Component\Memory\MemoryManager;
-use Saturne\Component\Server\Server;
+use Saturne\Component\Server\ProcessServer;
 
 use Saturne\Model\Process;
 
@@ -27,7 +27,7 @@ class ProcessKernel extends AbstractKernel
         $this->container->set('saturne.process_gateway', new ProcessGateway($this));
         $this->container->set('saturne.logger.file', new FileLogger($this));
         $this->container->set('saturne.client_manager', new ClientManager($this));
-        $this->container->set('saturne.server', new Server($this));
+        $this->container->set('saturne.server', new ProcessServer($this));
         
         $this->setLoggers();
     }
@@ -49,12 +49,7 @@ class ProcessKernel extends AbstractKernel
             ->setAllocatedMemory($memoryManager->getAllocatedMemory())
         ;
         
-        $this->container->get('saturne.process_gateway')->writeTo($this->process->getOutput(), [
-            'emmitter' => $this->process->getName(),
-            'memory' => $this->process->getMemory(),
-            'allocated-memory' => $this->process->getAllocatedMemory()
-        ]);
-        die;
+        $this->container->get('saturne.process_gateway')->writeToMaster([]);
         
         $this->get('saturne.server')->listen();
     }
@@ -64,7 +59,7 @@ class ProcessKernel extends AbstractKernel
      */
     public function shutdown()
     {
-        
+        $this->container->get('saturne.process_gateway')->writeToMaster([]);
     }
     
     /**
@@ -81,5 +76,13 @@ class ProcessKernel extends AbstractKernel
     public function setLoggers()
     {
         
+    }
+    
+    /**
+     * @return Process
+     */
+    public function getProcess()
+    {
+        return $this->process;
     }
 }
