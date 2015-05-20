@@ -21,7 +21,7 @@ class MasterKernel extends AbstractKernel
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init($options = [])
     {
         $this->setContainer();
         
@@ -41,7 +41,7 @@ class MasterKernel extends AbstractKernel
     /**
      * {@inheritdoc}
      */
-    public function run($options = [])
+    public function run()
     {
         $memoryManager = $this->container->get('saturne.memory_manager');
         $memoryManager->refreshMemory();

@@ -10,13 +10,15 @@ interface KernelInterface
 {
     /**
      * Initialize the engine and set all components in the container
+     * 
+     * @param array $options
      */
-    public function init();
+    public function init($options = []);
     
     /**
      * Run the engine
      */
-    public function run($options = []);
+    public function run();
     
     /**
      * Shutdown the engine

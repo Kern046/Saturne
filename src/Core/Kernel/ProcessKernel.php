@@ -18,7 +18,7 @@ class ProcessKernel extends AbstractKernel
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init($options = [])
     {
         $this->setContainer();
         
@@ -29,26 +29,17 @@ class ProcessKernel extends AbstractKernel
         $this->container->set('saturne.client_manager', new ClientManager($this));
         $this->container->set('saturne.server', new ProcessServer($this));
         
+        $this->container->get('saturne.memory_manager')->refreshMemory();
+        $this->setProcess($options);
+        
         $this->setLoggers();
     }
     
     /**
      * {@inheritdoc}
      */
-    public function run($options = [])
+    public function run()
     {
-        $memoryManager = $this->container->get('saturne.memory_manager');
-        $memoryManager->refreshMemory();
-        
-        $this->process =
-            (new Process())
-            ->setName($options['process'])
-            ->setInput(STDIN)
-            ->setOutput(STDOUT)
-            ->setMemory($memoryManager->getMemory())
-            ->setAllocatedMemory($memoryManager->getAllocatedMemory())
-        ;
-        
         $this->container->get('saturne.process_gateway')->writeToMaster([]);
         
         $this->get('saturne.server')->listen();
@@ -75,7 +66,23 @@ class ProcessKernel extends AbstractKernel
      */
     public function setLoggers()
     {
+        $logger = $this->container->get('saturne.logger.file');
+        $logger->setFile($this->process->getName());
         
+        $this->container->get('saturne.event_manager')->addListener();
+    }
+    
+    public function setProcess($options)
+    {
+        $memoryManager = $this->container->get('saturne.memory_manager');
+        $this->process =
+            (new Process())
+            ->setName($options['process'])
+            ->setInput(STDIN)
+            ->setOutput(STDOUT)
+            ->setMemory($memoryManager->getMemory())
+            ->setAllocatedMemory($memoryManager->getAllocatedMemory())
+        ;
     }
     
     /**
