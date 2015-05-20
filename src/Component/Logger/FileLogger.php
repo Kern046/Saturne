@@ -26,6 +26,8 @@ class FileLogger implements LoggerInterface
     ];
     /** @var string **/
     private $dir;
+    /** @var string **/
+    private $file;
     /** @var EngineKernel **/
     private $engine;
     
@@ -37,6 +39,12 @@ class FileLogger implements LoggerInterface
         {
             mkdir($this->dir);
         }
+        $this->setFile(date('d_m_Y'));
+    }
+    
+    public function setFile($filename)
+    {
+        $this->file = $this->dir . DIRECTORY_SEPARATOR . $filename . '.log';
     }
     
     /**
@@ -48,7 +56,6 @@ class FileLogger implements LoggerInterface
         {
             throw new \InvalidArgumentException('The data must have a message');
         }
-        $file = $this->dir . DIRECTORY_SEPARATOR . date('d_m_Y') . '.log';
-        file_put_contents($file, date('[H:i:s] ') . $data['message'] . PHP_EOL, FILE_APPEND);
+        file_put_contents($this->file, date('[H:i:s] ') . $data['message'] . PHP_EOL, FILE_APPEND);
     }
 }
