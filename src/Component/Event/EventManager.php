@@ -20,6 +20,7 @@ class EventManager implements EventManagerInterface
     const NETWORK_SHUTDOWN = 'network-shutdown';
     
     const NETWORK_NEW_PROCESS = 'network-new-process';
+    const NETWORK_PROCESS_LISTENING = 'network-process-listening';
     const NETWORK_PROCESS_SHUTDOWN = 'network-process-shutdown';
     const NETWORK_PROCESSES_CLEARED = 'network-processes-cleared';
     

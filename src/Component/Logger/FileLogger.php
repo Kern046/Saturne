@@ -19,6 +19,7 @@ class FileLogger implements LoggerInterface
         EventManager::NETWORK_SERVER_LISTENING => 'log',
         EventManager::NETWORK_NEW_CONNECTION => 'log',
         EventManager::NETWORK_SHUTDOWN => 'log',
+        EventManager::NETWORK_PROCESS_LISTENING => 'log',
         EventManager::NETWORK_PROCESS_SHUTDOWN => 'log',
         EventManager::NETWORK_PROCESSES_CLEARED => 'log',
         EventManager::NETWORK_NEW_PROCESS => 'log',
@@ -52,10 +53,17 @@ class FileLogger implements LoggerInterface
      */
     public function log($data)
     {
-        if(!isset($data['message']))
+        if(empty($data['message']))
         {
             throw new \InvalidArgumentException('The data must have a message');
         }
+        
+        $data['message'] =
+            (isset($data['emitter']))
+            ? $data['emitter'] . ': ' . $data['message']
+            : $data['message']
+        ;
+        
         file_put_contents($this->file, date('[H:i:s] ') . $data['message'] . PHP_EOL, FILE_APPEND);
     }
 }
