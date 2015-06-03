@@ -26,10 +26,18 @@ class Process
     private $process;
     /** @var array **/
     private $clients = [];
+    /** @var string **/
+    private $address;
     
     public function __construct()
     {
         $this->startTime = new \DateTime();
+    }
+    
+    public function refreshMemory()
+    {
+        $this->memory = memory_get_usage();
+        $this->allocatedMemory = memory_get_usage(true);
     }
     
     /**
@@ -211,5 +219,17 @@ class Process
     public function getClients()
     {
         return $this->clients;
+    }
+    
+    public function setAddress($address)
+    {
+        $this->address = $address;
+        
+        return $this;
+    }
+    
+    public function getAddress()
+    {
+        return $this->address;
     }
 }
