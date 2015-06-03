@@ -3,7 +3,7 @@
 namespace Saturne\Core\Kernel;
 
 use Saturne\Component\Event\EventManager;
-use Saturne\Component\Process\ProcessManager;
+use Saturne\Component\Process\MasterManager;
 use Saturne\Component\Process\MasterGateway;
 use Saturne\Component\Logger\CliLogger;
 use Saturne\Component\Logger\FileLogger;
@@ -29,7 +29,7 @@ class MasterKernel extends AbstractKernel
         $this->container->set('saturne.memory_manager', new MemoryManager($this));
         $this->container->set('saturne.logger.cli', new CliLogger($this));
         $this->container->set('saturne.logger.file', new FileLogger($this));
-        $this->container->set('saturne.process_manager', new ProcessManager($this));
+        $this->container->set('saturne.process_manager', new MasterManager($this));
         $this->container->set('saturne.process_gateway', new MasterGateway($this));
         $this->container->set('saturne.load_balancer', new LoadBalancer($this));
         $this->container->set('saturne.client_manager', new ClientManager($this));

@@ -2,16 +2,16 @@
 
 namespace Saturne\Tests\Component\Process;
 
-use Saturne\Component\Process\ProcessManager;
+use Saturne\Component\Process\MasterManager;
 
 class ProcessManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ProcessManager **/
+    /** @var MasterManager **/
     private $manager;
     
     public function setUp()
     {
-        $this->manager = new ProcessManager($this->getEngineMock());
+        $this->manager = new MasterManager($this->getEngineMock());
     }
     
     public function testGetProcesses()
