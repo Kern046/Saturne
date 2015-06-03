@@ -34,10 +34,8 @@ class MasterGateway
      * @param Process $process
      * @return array
      */
-    public function read(Process $process)
+    public function read(Process $process, $bufferSize = 2048)
     {
-        $output = $process->getOutput();
-        rewind($output);
-        return json_decode(fgets($output), true);
+        return json_decode(fread($process->getOutput(), $bufferSize), true);
     }
 }

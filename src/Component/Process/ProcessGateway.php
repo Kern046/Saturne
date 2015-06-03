@@ -37,10 +37,8 @@ class ProcessGateway
      * 
      * @return array
      */
-    public function readFromMaster()
+    public function readFromMaster($bufferSize = 2048)
     {
-        $input = $this->engine->getProcess()->getInput();
-        rewind($input);
-        return json_decode(fgets($input), true);
+        return json_decode(fread($this->engine->getProcess()->getInput(), $bufferSize), true);
     }
 }
