@@ -1,6 +1,6 @@
 <?php
 
-$socket = stream_socket_client('tcp://127.0.0.1:8889');
+$socket = stream_socket_client('tcp://0.0.0.0:8889');
 
 stream_socket_sendto($socket, json_encode([
     'action' => 'server:shutdown',
